@@ -3,6 +3,7 @@
 // create a new scene
 let gameScene = new Phaser.Scene('Game');
 
+
 let scale = 6;
 var imageSleepkey;
 
@@ -74,6 +75,9 @@ gameScene.preload = function() {
   this.load.image('heart', 'assets/images/heart.png');
   this.load.image('brain', 'assets/images/brain.png');
   this.load.image('background', 'assets/images/background.png');
+
+  this.load.image("exerciseBall1",);
+  this.load.image("exerciseBall2",);
 };
 
 // ass all objects active from the start in the game in create
@@ -101,19 +105,13 @@ gameScene.create = function() {
 
 gameScene.update = function() {
   this.healthBar.decrease(0.1);
-  if (socialGame.complete) {
+  if (gameScene.socialGame.complete) {
     this.healthBar,increase(0.5);
   }
-  //sleep minigame
-  this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
-  //this.sleepButton.setScale(scale);
-  this.setInteractive(this.sleepButton);
-};
 
-
-
-
-  //sleep minigame
+  // sleep minigame
+  //
+  //
   this.input.keyboard.on('keydown_Z', function (event) {
       imageSleepkey.setScale(scale * 1.1);
   });
@@ -121,7 +119,28 @@ gameScene.update = function() {
   this.input.keyboard.on('keyup_Z', function (event) {
       imageSleepkey.setScale(scale);
   });
-}
+
+  // exercise minigame
+  //
+  //
+  this.input.keyboard.on('keydown_[', function (event) {
+      ball1.setScale(scale * 1.1);
+  });
+
+  this.input.keyboard.on('keyup_[', function (event) {
+      ball1.setScale(scale);
+  });
+
+  this.input.keyboard.on('keydown_]', function (event) {
+      ball2.setScale(scale * 1.1);
+  });
+
+  this.input.keyboard.on('keyup_]', function (event) {
+      ball2.setScale(scale);
+  });
+};
+
+
 gameScene.generateWorkNums = function(){
   this.workNums = [Math.floor(Math.random()*10),
   Math.floor(Math.random()*10),
@@ -177,5 +196,4 @@ gameScene.socialGame = function() {
         complete = false;
     }
 
-    //this.input.keyboard.addKeys();
 }
