@@ -16,6 +16,10 @@ let config = {
 
 // create the game, and pass it the configuration
 let game = new Phaser.Game(config);
+let loadingBarBackground;
+let loadingBar;
+let loadingBarWidth = 150;
+let loadingBarHeight = 30;
 
 // a simple set of states that the game can assume.
 let GAMESTATE = {
@@ -33,6 +37,29 @@ gameScene.init = function() {
 };
 
 gameScene.preload = function() {
+  let gameWidth = this.sys.game.config.width;
+  let gameHeight = this.sys.game.config.height;
+
+  loadingBarBackground = this.add.graphics();
+  loadingBarBackground.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
+  loadingBarBackground.fillStyle("#000000", 0.2);
+  loadingBarBackground.fillRect(0, 0, loadingBarWidth, loadingBarHeight);
+
+  loadingBar = this.add.graphics();
+  loadingBar.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
+  loadingBar.fillStyle("#222222", 1);
+  loadingBar.fillRect(0, 0, 0, loadingBarHeight);
+
+  // to update the loading bar, we will add an eventlistener to the 'progress' event of the load manager from
+  // our loading scene. This is fired every time an asset is loaded and has a value of 0-1 (% of assets loaded)
+  // this.load.on('progress', function(value){
+  //     // clear progress bar
+  //     loadingBar.clear();
+  //     loadingBar.fillStyle("#222222", 1);
+  //     // draw new progress bar, scaled according to value (% of assets loaded)
+  //     loadingBar.fillRect(0, 0, value * loadingBarWidth, loadingBarHeight);
+  // }, this);
+
   this.load.image('apple', 'assets/images/food/Apple.png');
   this.load.image('bacon', 'assets/images/food/Bacon.png');
   this.load.image('chicken', 'assets/images/food/Chicken.png');
@@ -42,6 +69,9 @@ gameScene.preload = function() {
   this.load.image('character', 'assets/images/characterSprite.png');
   this.load.image('health', 'assets/images/healthBar.png');
   this.load.image('heart', 'assets/images/heart.png');
+  this.load.image('brain', 'assets/images/brain.png');
+  this.load.image('background', 'assets/images/background.png');
+
 }
 
 // ass all objects active from the start in the game in create
@@ -52,9 +82,20 @@ gameScene.create = function() {
     this.background.depth = -10;
     this.background.width = config.width;
     this.background.height = config.height;
+
+    this.healthBar = new HealthBar(this, config.width/2, config.height/2);
 };
 
-gameScene.
+gameScene.update = function() {
+  // this.load.on('progress', function(value){
+  //     // clear progress bar
+  //     loadingBar.clear();
+  //     loadingBar.fillStyle("#222222", 1);
+  //     // draw new progress bar, scaled according to value (% of assets loaded)
+  //
+  // }, this);
+  this.healthBar.decrease(0.1);
+}
 
 gameScene.gameOver = function(){
     this.state = GAMESTATE.GAMEOVER;
