@@ -4,7 +4,8 @@
 let gameScene = new Phaser.Scene('Game');
 
 
-let scale = 6;
+let scale = 0.5;
+let ball_scale = 0.25;
 var imageSleepkey;
 
 // our game's configuration
@@ -76,8 +77,9 @@ gameScene.preload = function() {
   this.load.image('brain', 'assets/images/brain.png');
   this.load.image('background', 'assets/images/background.png');
 
-  this.load.image("exerciseBall1",);
-  this.load.image("exerciseBall2",);
+  this.load.image("sleepButton", "assets/images/sleepButton.png");
+  this.load.image("exerciseBall1", "assets/images/darkcircle.png");
+  this.load.image("exerciseBall2","assets/images/lightcircle.png");
 };
 
 // ass all objects active from the start in the game in create
@@ -96,8 +98,14 @@ gameScene.create = function() {
 
 
     //sleep minigame
-    imageSleepkey = this.add.image(150, 100, 'heart').setOrigin(0);
+    imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
+
+    // exercise minigame
+    exerciseBall1 = this.add.image(700, 100, 'exerciseBall1').setOrigin(0);
+    exerciseBall1.setScale(ball_scale);
+    exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
+    exerciseBall2.setScale(ball_scale);
 
     //social game
     this.socialGame();
@@ -123,21 +131,27 @@ gameScene.update = function() {
   // exercise minigame
   //
   //
-  this.input.keyboard.on('keydown_[', function (event) {
-      ball1.setScale(scale * 1.1);
+  this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
+      exerciseBall1.setScale(ball_scale * 1.1);
   });
 
-  this.input.keyboard.on('keyup_[', function (event) {
-      ball1.setScale(scale);
+  this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
+      exerciseBall1.setScale(ball_scale);
   });
 
-  this.input.keyboard.on('keydown_]', function (event) {
-      ball2.setScale(scale * 1.1);
+  this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
+      exerciseBall2.setScale(ball_scale * 1.1);
   });
 
-  this.input.keyboard.on('keyup_]', function (event) {
-      ball2.setScale(scale);
+  this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
+      exerciseBall2.setScale(ball_scale);
   });
+
+
+
+  // food minigame
+
+
 };
 
 
