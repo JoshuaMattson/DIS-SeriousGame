@@ -3,6 +3,8 @@
 // create a new scene
 let gameScene = new Phaser.Scene('Game');
 
+let scale = 1;
+
 // our game's configuration
 let config = {
   type: Phaser.AUTO,
@@ -52,6 +54,14 @@ gameScene.create = function() {
     this.background.depth = -10;
     this.background.width = config.width;
     this.background.height = config.height;
+
+
+
+
+    //sleep minigame
+    this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
+    //this.sleepButton.setScale(scale);
+    this.setInteractive(this.sleepButton);
 };
 
 gameScene.generateWorkNums(){
@@ -72,7 +82,36 @@ gameScene.makeWork() {
 
 };
 
-gameScene.
+//making buttons when clicking
+gameScene.setInteractive = function(button){
+      button.setInteractive();
+      button.on("pointerdown", function(){
+      });
+
+      button.on("pointerover", function(){
+          //resetItemState(item);
+          this.setScale(scale * 1.1);
+      });
+
+      button.on("pointerout", function(){
+          //resetItemState(item);
+          this.setScale(scale);
+      });
+
+};
+
+// tween reset
+function resetItemState(item){
+    if(item.hoverTweenOut){
+        item.hoverTweenOut.remove();
+    }
+    if(item.onClickTween){
+        item.onClickTween.remove();
+    }
+    if(item.hoverTweenIn){
+        item.hoverTweenIn.remove();
+    }
+}
 
 gameScene.gameOver = function(){
     this.state = GAMESTATE.GAMEOVER;
