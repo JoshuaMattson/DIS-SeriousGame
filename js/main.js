@@ -15,6 +15,13 @@ let config = {
   type: Phaser.AUTO,
   width: 1000,
   height: 1000,
+  physics: {
+      default: 'arcade',
+      arcade: {
+          gravity: { y: 2000 },
+          debug: false
+      }
+  },
   scene: [bootScene, loadingScene, homeScene, gameScene],
   title: 'DIS final Project',
   pixelArt: false, //Use anti-aliasing
@@ -79,6 +86,8 @@ gameScene.preload = function() {
   this.load.image('brain', 'assets/images/brain.png');
   this.load.image('background', 'assets/images/background.png');
 
+  this.load.image("food_player","assets/images/food_player.png");
+
   this.load.image("sleepButton", "assets/images/sleepButton.png");
   this.load.image("exerciseBall1", "assets/images/darkcircle.png");
   this.load.image("exerciseBall2","assets/images/lightcircle.png");
@@ -93,10 +102,18 @@ gameScene.create = function() {
     this.background.width = config.width;
     this.background.height = config.height;
 
-    this.healthBar = new HealthBar(this, config.width/2, config.height/2);
+    //this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //Work mini games
     this.generateWorkNums();
     this.makeWork();
+
+    // food minigame
+    //
+    //
+    this.foodPlayer = new Food_Player(this, 100, 100);
+
+
+
 
 
     //sleep minigame
@@ -109,10 +126,16 @@ gameScene.create = function() {
     exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
     exerciseBall2.setScale(ball_scale);
 
-    //social game
+   
     // this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //sleep minigame
     //this.sleepButton.setScale(scale);
+    //this.setInteractive(this.sleepButton);
+
+    //social game
+    this.firstPhrase = true;
+    this.prevPhrase = 0;
+    this.numSocial = 0;
     this.socialGame();
 
     this.heart = this.add.sprite(config.width/2-260, config.height-55, 'heart');
@@ -129,7 +152,7 @@ gameScene.create = function() {
 
 gameScene.update = function() {
   this.exerciseBar.decrease(0.02);
-  this.socialBar.decrease(0.01);
+  this.socialBar.decrease(0.05);
   this.foodBar.decrease(0.04);
   this.sleepBar.decrease(0.03);
   this.workBar.decrease(0.06);
@@ -148,6 +171,12 @@ gameScene.update = function() {
   //sleep minigame
   //this.sleepButton.setScale(scale);
 
+
+
+  // food minigame
+  //
+  //
+  this.foodPlayer.update();
 
   // sleep minigame
   //
@@ -186,6 +215,12 @@ gameScene.update = function() {
 
   //social game
   gameScene.playerText.setText(gameScene.textWord.substring(0, gameScene.combo.index));
+  if (gameScene.newWord === true) {
+    gameScene.playerText.setText("");
+    //this.numSocial++;
+    gameScene.socialBar.increase(5);
+    gameScene.socialGame();
+  }
 
 };
 
@@ -277,25 +312,39 @@ gameScene.makeWork = function(){
 // };
 
 gameScene.socialGame = function() {
-    complete = true;
-    let textWords = ["hey", "wassup","hello",
+  gameScene.newWord = false;
+  let wordnum = 0;
+  let textWords = ["hey", "wassup","hello",
                     "want to hang out","how are you",
                     "can we talk","how about dinner",
-                    "howdy","thank you","see you soon"];
+                    "howdy","thank you","see you soon",
+                    "coffee at eight", "i wanna party",
+                    "are you free"];
+  if(this.firstPhrase == true) {
+    wordNum = Math.floor(Math.random() * textWords.length);
+    this.prevPhrase = wordNum;
+  } else {
+    while(wordNum === this.prevPhrase) {
+      wordNum = Math.floor(Math.random() * textWords.length);
+    }
+  }
+  this.firstPhrase = false;
+  this.prevPhrase = wordNum;
+  
+  console.log(textWords[wordNum]);
+  gameScene.textWord = textWords[wordNum];
+  let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+  wordNumText.depth = 10;
+  gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
+  gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+    
+  this.input.keyboard.on('keycombomatch', function (event) {
 
-    let wordNum = Math.floor(Math.random() * textWords.length);
-    console.log(textWords[wordNum]);
-    gameScene.textWord = textWords[wordNum];
-    let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
-    wordNumText.depth = 10;
-    gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
-    gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
-
-    this.input.keyboard.on('keycombomatch', function (event) {
-
-        console.log('Key Combo matched!');
-        complete = true;
-    });
-
-    //this.input.keyboard.addKeys();
+    console.log('Key Combo matched!');
+    gameScene.playerText.setText("");
+    wordNumText.setText("");
+    gameScene.newWord = true;
+  });
+  
+    
 }
