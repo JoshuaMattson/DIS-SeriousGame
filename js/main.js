@@ -15,6 +15,13 @@ let config = {
   type: Phaser.AUTO,
   width: 1000,
   height: 1000,
+  physics: {
+      default: 'arcade',
+      arcade: {
+          gravity: { y: 2000 },
+          debug: false
+      }
+  },
   scene: [bootScene, loadingScene, homeScene, gameScene],
   title: 'DIS final Project',
   pixelArt: false, //Use anti-aliasing
@@ -79,6 +86,8 @@ gameScene.preload = function() {
   this.load.image('brain', 'assets/images/brain.png');
   this.load.image('background', 'assets/images/background.png');
 
+  this.load.image("food_player","assets/images/food_player.png");
+
   this.load.image("sleepButton", "assets/images/sleepButton.png");
   this.load.image("exerciseBall1", "assets/images/darkcircle.png");
   this.load.image("exerciseBall2","assets/images/lightcircle.png");
@@ -97,6 +106,14 @@ gameScene.create = function() {
     //Work mini games
     this.generateWorkNums();
     this.makeWork();
+
+    // food minigame
+    //
+    //
+    this.foodPlayer = new Food_Player(this, 100, 100);
+
+
+
 
 
     //sleep minigame
@@ -154,6 +171,12 @@ gameScene.update = function() {
   //this.sleepButton.setScale(scale);
   //this.setInteractive(this.sleepButton);
 
+
+
+  // food minigame
+  //
+  //
+  this.foodPlayer.update();
 
   // sleep minigame
   //
