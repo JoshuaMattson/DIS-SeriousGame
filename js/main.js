@@ -3,7 +3,10 @@
 // create a new scene
 let gameScene = new Phaser.Scene('Game');
 
-let scale = 1;
+
+let scale = 0.5;
+let ball_scale = 0.25;
+var imageSleepkey;
 
 // our game's configuration
 let config = {
@@ -74,6 +77,9 @@ gameScene.preload = function() {
   this.load.image('brain', 'assets/images/brain.png');
   this.load.image('background', 'assets/images/background.png');
 
+  this.load.image("sleepButton", "assets/images/sleepButton.png");
+  this.load.image("exerciseBall1", "assets/images/darkcircle.png");
+  this.load.image("exerciseBall2","assets/images/lightcircle.png");
 };
 
 // ass all objects active from the start in the game in create
@@ -86,77 +92,87 @@ gameScene.create = function() {
     this.background.height = config.height;
 
     this.healthBar = new HealthBar(this, config.width/2, config.height/2);
-
-
+    //Work mini games
+    this.generateWorkNums();
+    this.makeWork();
 
 
     //sleep minigame
-    this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
-    //this.sleepButton.setScale(scale);
-    this.setInteractive(this.sleepButton);
+    imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
+    imageSleepkey.setScale(scale);
+
+    // exercise minigame
+    exerciseBall1 = this.add.image(700, 100, 'exerciseBall1').setOrigin(0);
+    exerciseBall1.setScale(ball_scale);
+    exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
+    exerciseBall2.setScale(ball_scale);
+
+    //social game
     this.socialGame();
 };
 
 gameScene.update = function() {
-  // this.load.on('progress', function(value){
-  //     // clear progress bar
-  //     loadingBar.clear();
-  //     loadingBar.fillStyle("#222222", 1);
-  //     // draw new progress bar, scaled according to value (% of assets loaded)
-  //
-  // }, this);
   this.healthBar.decrease(0.1);
+  if (gameScene.socialGame.complete) {
+    this.healthBar,increase(0.5);
+  }
 
-  this.playerText.setText(this.textWord.substring(0, this.combo.index));
-}
+  // sleep minigame
+  //
+  //
+  this.input.keyboard.on('keydown_Z', function (event) {
+      imageSleepkey.setScale(scale * 1.1);
+  });
+
+  this.input.keyboard.on('keyup_Z', function (event) {
+      imageSleepkey.setScale(scale);
+  });
+
+  // exercise minigame
+  //
+  //
+  this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
+      exerciseBall1.setScale(ball_scale * 1.1);
+  });
+
+  this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
+      exerciseBall1.setScale(ball_scale);
+  });
+
+  this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
+      exerciseBall2.setScale(ball_scale * 1.1);
+  });
+
+  this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
+      exerciseBall2.setScale(ball_scale);
+  });
+
+
+
+  // food minigame
+
+
+};
+
+
 gameScene.generateWorkNums = function(){
-  let num1 = Math.floor(Math.random()*10);
-  let num2 = Math.floor(Math.random()*10);
-  let num3 = Math.floor(Math.random()*10);
-  this.workNums = [num1, num2, num3];
+  this.workNums = [Math.floor(Math.random()*10),
+  Math.floor(Math.random()*10),
+  Math.floor(Math.random()*10)];
 };
 
 gameScene.makeWork = function(){
-  this.num1 = this.add.text(0, 0, this.workNums.num1, { fontSize: '24px', fill: '#000000' });
-  this.num2 = this.add.text(0, 0, this.workNums.num2, { fontSize: '24px', fill: '#000000' });
-  this.num3 = this.add.text(0, 0, this.workNums.num3, { fontSize: '24px', fill: '#000000' });
-  this.nums = this.add.conatiner(0,0);
-  this.nums.add.existing(num1);
-  this.nums.add.existing(num2);
-  this.nums.add.existing(num3);
+  this.num1 = this.add.text(30, 30, this.workNums[0], { fontSize: '42px', fill: '#000000' });
+  this.num2 = this.add.text(60, 30, this.workNums[1], { fontSize: '42px', fill: '#000000' });
+  this.num3 = this.add.text(90, 30, this.workNums[2], { fontSize: '42px', fill: '#000000' });
+  //this.text = this.add.text(420, 50, 'Work', {fontSize: '42px', fill: '#000000'});
+  this.nums = this.add.container(420,100);
+  this.nums.add(this.num1);
+  this.nums.add(this.num2);
+  this.nums.add(this.num3);
 
 };
 
-//making buttons when clicking
-gameScene.setInteractive = function(button){
-      button.setInteractive();
-      button.on("pointerdown", function(){
-      });
-
-      button.on("pointerover", function(){
-          //resetItemState(item);
-          this.setScale(scale * 1.1);
-      });
-
-      button.on("pointerout", function(){
-          //resetItemState(item);
-          this.setScale(scale);
-      });
-
-};
-
-// tween reset
-function resetItemState(item){
-    if(item.hoverTweenOut){
-        item.hoverTweenOut.remove();
-    }
-    if(item.onClickTween){
-        item.onClickTween.remove();
-    }
-    if(item.hoverTweenIn){
-        item.hoverTweenIn.remove();
-    }
-}
 
 gameScene.gameOver = function(){
     this.state = GAMESTATE.GAMEOVER;
@@ -192,4 +208,3 @@ gameScene.socialGame = function() {
     
     //this.input.keyboard.addKeys();
 }
-
