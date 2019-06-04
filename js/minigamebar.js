@@ -27,11 +27,11 @@ class MinigameBar {
 
     increase (amount) {
         this.value += amount;
-        if (this.value > 160) {
-          this.value = 160;
+        if (this.value > 200) {
+          this.value = 200;
         }
         this.draw();
-        return (this.value === 160);
+        return (this.value === 200);
     }
 
     draw ()
