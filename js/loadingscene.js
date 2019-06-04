@@ -45,12 +45,10 @@ loadingScene.preload = function() {
 
     // LOAD ALL ASSETS HERE
     // currently that's of course only the background
-    this.load.image('background', 'assets/images/background.png');
+    //this.load.image('background', 'assets/images/background.png');
 
 };
 
 loadingScene.create = function() {
     this.scene.start('Home');
 };
-
-
