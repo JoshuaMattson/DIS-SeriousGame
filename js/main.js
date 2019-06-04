@@ -197,6 +197,9 @@ gameScene.update = function() {
   // food minigame
 
 
+  //social game
+  gameScene.playerText.setText(gameScene.textWord.substring(0, gameScene.combo.index));
+
 };
 
 function numtoWord(num){
@@ -264,28 +267,25 @@ gameScene.makeWork = function(){
 // };
 
 gameScene.socialGame = function() {
-    let complete = true;
+    complete = true;
     let textWords = ["hey", "wassup","hello",
                     "want to hang out","how are you",
                     "can we talk","how about dinner",
                     "howdy","thank you","see you soon"];
-    if (complete) {
-        let wordNum = Math.floor(Math.random() * textWords.length);
-        console.log(textWords[wordNum]);
-        let wordNumText = gameScene.add.text(this.width/2, this.height - 150, textWords[wordNum], {
-        font: '40px Arial',
-        fill: '#ff0000'
-        });
-        //wordNumText.setOrigin(0.5, 0.5);
-        wordNumText.depth = 10;
-        var combo = this.input.keyboard.createCombo(textWords[wordNum]);
 
-        this.input.keyboard.on('keycombomatch', function (event) {
+    let wordNum = Math.floor(Math.random() * textWords.length);
+    console.log(textWords[wordNum]);
+    gameScene.textWord = textWords[wordNum];
+    let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+    wordNumText.depth = 10;
+    gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
+    gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+    
+    this.input.keyboard.on('keycombomatch', function (event) {
 
-            console.log('Key Combo matched!');
-
-        });
-        complete = false;
-    }
-
+        console.log('Key Combo matched!');
+        complete = true;
+    });
+    
+    //this.input.keyboard.addKeys();
 }
