@@ -44,7 +44,7 @@ gameScene.preload = function() {
   this.load.image('character', 'assets/images/characterSprite.png');
   this.load.image('health', 'assets/images/healthBar.png');
   this.load.image('heart', 'assets/images/heart.png');
-}
+};
 
 // ass all objects active from the start in the game in create
 gameScene.create = function() {
@@ -64,14 +64,14 @@ gameScene.create = function() {
     this.setInteractive(this.sleepButton);
 };
 
-gameScene.generateWorkNums(){
+gameScene.generateWorkNums = function(){
   let num1 = Math.floor(Math.random()*10);
   let num2 = Math.floor(Math.random()*10);
   let num3 = Math.floor(Math.random()*10);
   this.workNums = [num1, num2, num3];
 };
 
-gameScene.makeWork() {
+gameScene.makeWork = function(){
   this.num1 = this.add.text(0, 0, this.workNums.num1, { fontSize: '24px', fill: '#000000' });
   this.num2 = this.add.text(0, 0, this.workNums.num2, { fontSize: '24px', fill: '#000000' });
   this.num3 = this.add.text(0, 0, this.workNums.num3, { fontSize: '24px', fill: '#000000' });
