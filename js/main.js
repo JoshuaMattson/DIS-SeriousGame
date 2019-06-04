@@ -113,6 +113,11 @@ gameScene.create = function() {
     // this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //sleep minigame
     //this.sleepButton.setScale(scale);
+    //this.setInteractive(this.sleepButton);
+
+    //social game
+    this.firstPhrase = true;
+    this.prevPhrase = 0;
     this.socialGame();
 
     this.heart = this.add.sprite(config.width/2-260, config.height-55, 'heart');
@@ -186,6 +191,11 @@ gameScene.update = function() {
 
   //social game
   gameScene.playerText.setText(gameScene.textWord.substring(0, gameScene.combo.index));
+  if (gameScene.newWord === true) {
+    gameScene.playerText.setText("");
+    gameScene.socialBar.increase(5);
+    gameScene.socialGame();
+  }
 
 };
 
@@ -280,7 +290,29 @@ gameScene.socialGame = function() {
     let textWords = ["hey", "wassup","hello",
                     "want to hang out","how are you",
                     "can we talk","how about dinner",
-                    "howdy","thank you","see you soon"];
+                    "howdy","thank you","see you soon",
+                    "coffee at eight", "i wanna party",
+                    "are you free","i appreciate it",
+                    "is everything all right","heyyo"];
+  if(this.firstPhrase == true) {
+    wordNum = Math.floor(Math.random() * textWords.length);
+    this.prevPhrase = wordNum;
+  } else {
+    while(wordNum === this.prevPhrase) {
+      wordNum = Math.floor(Math.random() * textWords.length);
+    }
+  }
+  this.firstPhrase = false;
+  this.prevPhrase = wordNum;
+  
+  console.log(textWords[wordNum]);
+  gameScene.textWord = textWords[wordNum];
+  let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+  wordNumText.depth = 10;
+  gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
+  gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+    
+  this.input.keyboard.on('keycombomatch', function (event) {
 
     let wordNum = Math.floor(Math.random() * textWords.length);
     console.log(textWords[wordNum]);
