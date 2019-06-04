@@ -54,6 +54,24 @@ gameScene.create = function() {
     this.background.height = config.height;
 };
 
+gameScene.generateWorkNums(){
+  let num1 = Math.floor(Math.random()*10);
+  let num2 = Math.floor(Math.random()*10);
+  let num3 = Math.floor(Math.random()*10);
+  this.workNums = [num1, num2, num3];
+};
+
+gameScene.makeWork() {
+  this.num1 = this.add.text(0, 0, this.workNums.num1, { fontSize: '24px', fill: '#000000' });
+  this.num2 = this.add.text(0, 0, this.workNums.num2, { fontSize: '24px', fill: '#000000' });
+  this.num3 = this.add.text(0, 0, this.workNums.num3, { fontSize: '24px', fill: '#000000' });
+  this.nums = this.add.conatiner(0,0);
+  this.nums.add.existing(num1);
+  this.nums.add.existing(num2);
+  this.nums.add.existing(num3);
+
+};
+
 gameScene.
 
 gameScene.gameOver = function(){
