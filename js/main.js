@@ -112,10 +112,6 @@ gameScene.create = function() {
     //
     this.foodPlayer = new Food_Player(this, 100, 100);
 
-
-
-
-
     //sleep minigame
     imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
@@ -128,12 +124,7 @@ gameScene.create = function() {
 
    
     // this.healthBar = new HealthBar(this, config.width/2, config.height/2);
-    //sleep minigame
-    this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
-    //this.sleepButton.setScale(scale);
-    //this.setInteractive(this.sleepButton);
 
-    //social game
     this.socialGame();
 
     this.heart = this.add.sprite(config.width/2-260, config.height-55, 'heart');
@@ -169,7 +160,7 @@ gameScene.update = function() {
   //sleep minigame
   this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
   //this.sleepButton.setScale(scale);
-  //this.setInteractive(this.sleepButton);
+  this.setInteractive(this.sleepButton);
 
 
 
@@ -300,21 +291,19 @@ gameScene.socialGame = function() {
                     "can we talk","how about dinner",
                     "howdy","thank you","see you soon"];
 
-      let wordNum = Math.floor(Math.random() * textWords.length);
-      console.log(textWords[wordNum]);
-      gameScene.textWord = textWords[wordNum];
-      let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
-      wordNumText.depth = 10;
-      gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
-      gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+    let wordNum = Math.floor(Math.random() * textWords.length);
+    console.log(textWords[wordNum]);
+    gameScene.textWord = textWords[wordNum];
+    let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+    wordNumText.depth = 10;
+    gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
+    gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
     
-      this.input.keyboard.on('keycombomatch', function (event) {
+    this.input.keyboard.on('keycombomatch', function (event) {
 
         console.log('Key Combo matched!');
-        gameScene.socialBar.increase(30);
-        gameScene.newWord = true;
-      });
-  
-    }
+        complete = true;
+    });
     
+    //this.input.keyboard.addKeys();
 }
