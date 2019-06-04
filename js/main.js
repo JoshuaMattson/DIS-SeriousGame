@@ -74,19 +74,24 @@ gameScene.preload = function() {
   //     loadingBar.fillRect(0, 0, value * loadingBarWidth, loadingBarHeight);
   // }, this);
 
+  this.load.image("food_player","assets/images/food_player.png");
   this.load.image('apple', 'assets/images/food/Apple.png');
   this.load.image('bacon', 'assets/images/food/Bacon.png');
   this.load.image('chicken', 'assets/images/food/Chicken.png');
   this.load.image('cookie', 'assets/images/food/Cookie.png');
   this.load.image('potato', 'assets/images/food/Potato.png');
   this.load.image('steak', 'assets/images/food/Steak.png');
+
+  this.load.image('exercise', 'assets/images/dumbbell.png');
+  this.load.image('social', 'assets/images/social.png');
+  this.load.image('work', 'assets/images/work.png');
+  this.load.image('sleep', 'assets/images/sleep.png');
+
   this.load.image('character', 'assets/images/characterSprite.png');
   this.load.image('health', 'assets/images/healthBar.png');
   this.load.image('heart', 'assets/images/heart.png');
   this.load.image('brain', 'assets/images/brain.png');
   this.load.image('background', 'assets/images/background.png');
-
-  this.load.image("food_player","assets/images/food_player.png");
 
   this.load.image("sleepButton", "assets/images/sleepButton.png");
   this.load.image("exerciseBall1", "assets/images/darkcircle.png");
@@ -126,25 +131,30 @@ gameScene.create = function() {
     exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
     exerciseBall2.setScale(ball_scale);
 
-   
+
     // this.healthBar = new HealthBar(this, config.width/2, config.height/2);
-    //sleep minigame
-    this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
-    //this.sleepButton.setScale(scale);
+    //sleep minigame    //this.sleepButton.setScale(scale);
     //this.setInteractive(this.sleepButton);
 
     //social game
     this.socialGame();
 
-    this.heart = this.add.sprite(config.width/2-260, config.height-55, 'heart');
-    this.heart.setScale(1.2);
+    this.heart = this.add.sprite(55, config.height-115, 'heart');
+    this.heart.setScale(2);
+    this.food = this.add.sprite(config.width-250, config.height-75, 'apple');
+    this.food.setScale(1.5);
+    this.exercise = this.add.sprite(config.width-250, config.height-190, 'exercise');
+    this.exercise.setScale(0.23);
+    this.social = this.add.sprite(config.width-250, config.height-155, 'social');
+    this.social.setScale(0.2);
+    // this.sleep = this.add.sprite(config.width-250, config.height-80, 'sleep');
 
-    this.healthBar = new HealthBar(this, config.width/2-250, config.height - 70, 507);
-    this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 100, 160);
-    this.socialBar = new MinigameBar(this, config.width-225, config.height - 80, 160);
-    this.foodBar = new MinigameBar(this, config.width-225, config.height - 60, 160);
-    this.sleepBar = new MinigameBar(this, config.width-225, config.height - 40, 160);
-    this.workBar = new MinigameBar(this, config.width-225, config.height - 20, 160);
+    this.healthBar = new HealthBar(this, 80, config.height - 150, 608);
+    this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 210, 160);
+    this.socialBar = new MinigameBar(this, config.width-225, config.height - 170, 160);
+    this.foodBar = new MinigameBar(this, config.width-225, config.height - 130, 160);
+    this.sleepBar = new MinigameBar(this, config.width-225, config.height - 90, 160);
+    this.workBar = new MinigameBar(this, config.width-225, config.height - 50, 160);
 
 };
 
@@ -167,7 +177,6 @@ gameScene.update = function() {
   //   this.healthBar.increase(0.5);
   // }
   //sleep minigame
-  this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
   //this.sleepButton.setScale(scale);
   //this.setInteractive(this.sleepButton);
 
@@ -307,14 +316,14 @@ gameScene.socialGame = function() {
       wordNumText.depth = 10;
       gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
       gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
-    
+
       this.input.keyboard.on('keycombomatch', function (event) {
 
         console.log('Key Combo matched!');
         gameScene.socialBar.increase(30);
         gameScene.newWord = true;
       });
-  
+
     }
-    
+
 }
