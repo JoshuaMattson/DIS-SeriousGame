@@ -94,6 +94,7 @@ gameScene.create = function() {
     this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
     //this.sleepButton.setScale(scale);
     this.setInteractive(this.sleepButton);
+    this.socialGame();
 };
 
 gameScene.update = function() {
@@ -166,11 +167,11 @@ gameScene.gameOver = function(){
     }, this);
 };
 
-function socialGame() {
+gameScene.socialGame = function() {
     let complete = true;
     let textWords = ["hey", "wassup","hello",
-                    "want to hang out?","how are you?",
-                    "can we talk?","how about dinner?",
+                    "want to hang out","how are you",
+                    "can we talk","how about dinner",
                     "howdy","thank you","see you soon"];
     if(complete) {
         let wordNum = Math.floor(Math.random() * textWords.length);
@@ -181,8 +182,16 @@ function socialGame() {
         });
         //wordNumText.setOrigin(0.5, 0.5);
         wordNumText.depth = 10;
+        var combo = this.input.keyboard.createCombo(textWords[wordNum]);
+
+        this.input.keyboard.on('keycombomatch', function (event) {
+
+            console.log('Key Combo matched!');
+
+        });
         complete = false;
     }
     
     //this.input.keyboard.addKeys();
 }
+
