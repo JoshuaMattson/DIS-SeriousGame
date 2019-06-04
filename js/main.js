@@ -3,7 +3,8 @@
 // create a new scene
 let gameScene = new Phaser.Scene('Game');
 
-let scale = 1;
+let scale = 6;
+var imageSleepkey;
 
 // our game's configuration
 let config = {
@@ -91,9 +92,10 @@ gameScene.create = function() {
 
 
     //sleep minigame
-    this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
-    //this.sleepButton.setScale(scale);
-    this.setInteractive(this.sleepButton);
+    imageSleepkey = this.add.image(150, 100, 'heart').setOrigin(0);
+    imageSleepkey.setScale(scale);
+
+    //social game
     this.socialGame();
 };
 
@@ -106,6 +108,17 @@ gameScene.update = function() {
   //
   // }, this);
   this.healthBar.decrease(0.1);
+
+
+
+  //sleep minigame
+  this.input.keyboard.on('keydown_Z', function (event) {
+      imageSleepkey.setScale(scale * 1.1);
+  });
+
+  this.input.keyboard.on('keyup_Z', function (event) {
+      imageSleepkey.setScale(scale);
+  });
 }
 gameScene.generateWorkNums = function(){
   let num1 = Math.floor(Math.random()*10);
@@ -125,36 +138,6 @@ gameScene.makeWork = function(){
 
 };
 
-//making buttons when clicking
-gameScene.setInteractive = function(button){
-      button.setInteractive();
-      button.on("pointerdown", function(){
-      });
-
-      button.on("pointerover", function(){
-          //resetItemState(item);
-          this.setScale(scale * 1.1);
-      });
-
-      button.on("pointerout", function(){
-          //resetItemState(item);
-          this.setScale(scale);
-      });
-
-};
-
-// tween reset
-function resetItemState(item){
-    if(item.hoverTweenOut){
-        item.hoverTweenOut.remove();
-    }
-    if(item.onClickTween){
-        item.onClickTween.remove();
-    }
-    if(item.hoverTweenIn){
-        item.hoverTweenIn.remove();
-    }
-}
 
 gameScene.gameOver = function(){
     this.state = GAMESTATE.GAMEOVER;
@@ -191,7 +174,6 @@ gameScene.socialGame = function() {
         });
         complete = false;
     }
-    
+
     //this.input.keyboard.addKeys();
 }
-
