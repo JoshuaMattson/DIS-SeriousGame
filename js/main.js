@@ -8,7 +8,7 @@ let scale = 0.5;
 let ball_scale = 0.25;
 var imageSleepkey;
 
-let numCount = 0;
+let numsExist = false;
 
 // our game's configuration
 let config = {
@@ -112,9 +112,7 @@ gameScene.create = function() {
     //social game
     // this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //sleep minigame
-    this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
     //this.sleepButton.setScale(scale);
-    this.setInteractive(this.sleepButton);
     this.socialGame();
 
     this.heart = this.add.sprite(config.width/2-260, config.height-55, 'heart');
@@ -148,9 +146,7 @@ gameScene.update = function() {
   //   this.healthBar.increase(0.5);
   // }
   //sleep minigame
-  this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
   //this.sleepButton.setScale(scale);
-  this.setInteractive(this.sleepButton);
 
 
   // sleep minigame
@@ -184,15 +180,6 @@ gameScene.update = function() {
   });
 
   //workmini game
-  this.input.keyboard.on('keydown_'+numtoWord(this.workNums[numCount]), function (event){
-    if (numCount===0) {
-      gameScene.num1.setFill('#30e83c');
-      gameScene.num1.setFontSize('40px');
-    }
-    numCount++;
-  });
-
-
 
   // food minigame
 
@@ -243,14 +230,37 @@ gameScene.generateWorkNums = function(){
 };
 
 gameScene.makeWork = function(){
-  this.num1 = this.add.text(30, 30, this.workNums[0], { fontSize: '42px', fill: '#000000' });
-  this.num2 = this.add.text(60, 30, this.workNums[1], { fontSize: '42px', fill: '#000000' });
-  this.num3 = this.add.text(90, 30, this.workNums[2], { fontSize: '42px', fill: '#000000' });
+  if (numsExist===false){
+  this.num0 = this.add.text(30, 30, this.workNums[0], { fontSize: '50px', fill: '#000000' });
+  this.num1 = this.add.text(60, 30, this.workNums[1], { fontSize: '50px', fill: '#000000' });
+  this.num2 = this.add.text(90, 30, this.workNums[2], { fontSize: '50px', fill: '#000000' });
   //this.text = this.add.text(420, 50, 'Work', {fontSize: '42px', fill: '#000000'});
   this.nums = this.add.container(420,100);
+  this.nums.add(this.num0);
   this.nums.add(this.num1);
   this.nums.add(this.num2);
-  this.nums.add(this.num3);
+  this.input.keyboard.on('keydown', function (event){
+    console.log(event);
+    if (event.key === this.workNums[0]) {
+      gameScene.num0.setFill('#30e83c');
+      gameScene.num0.setFontSize('40px');
+    }
+  });
+
+  numsExist = true;
+} else {
+  this.num0.setText(this.workNums[0]);
+  this.num0.setFontSize('50px');
+  this.num0.setFill('#000000');
+
+  this.num1.setText(this.workNums[1]);
+  this.num1.setFontSize('50px');
+  this.num1.setFill('#000000');
+
+  this.num2.setText(this.workNums[2]);
+  this.num2.setFontSize('50px');
+  this.num2.setFill('#000000');
+}
 
 };
 
@@ -280,12 +290,12 @@ gameScene.socialGame = function() {
     wordNumText.depth = 10;
     gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
     gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
-    
+
     this.input.keyboard.on('keycombomatch', function (event) {
 
         console.log('Key Combo matched!');
         complete = true;
     });
-    
+
     //this.input.keyboard.addKeys();
 }
