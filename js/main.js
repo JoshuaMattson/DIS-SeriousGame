@@ -305,6 +305,9 @@ gameScene.socialGame = function() {
       wordNum = Math.floor(Math.random() * textWords.length);
     }
   }
+  this.firstPhrase = false;
+  this.prevPhrase = wordNum;
+  
 
   console.log(textWords[wordNum]);
   gameScene.textWord = textWords[wordNum];
