@@ -8,6 +8,8 @@ let scale = 0.5;
 let ball_scale = 0.25;
 var imageSleepkey;
 
+let numCount = 0;
+
 // our game's configuration
 let config = {
   type: Phaser.AUTO,
@@ -149,7 +151,7 @@ gameScene.update = function() {
   this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
   //this.sleepButton.setScale(scale);
   this.setInteractive(this.sleepButton);
-};
+
 
   // sleep minigame
   //
@@ -181,12 +183,54 @@ gameScene.update = function() {
       exerciseBall2.setScale(ball_scale);
   });
 
+  //workmini game
+  this.input.keyboard.on('keydown_'+numtoWord(this.workNums[numCount]), function (event){
+    if (numCount===0) {
+      gameScene.num1.setFill('#30e83c');
+      gameScene.num1.setFontSize('40px');
+    }
+    numCount++;
+  });
+
 
 
   // food minigame
 
 
 };
+
+function numtoWord(num){
+  if (num===0){
+    return 'ZERO';
+  }
+  if (num===1){
+    return 'ONE';
+  }
+  if (num===2){
+    return 'TWO';
+  }
+  if (num===3){
+    return 'THREE';
+  }
+  if (num===4){
+    return 'FOUR';
+  }
+  if (num===5){
+    return 'FIVE';
+  }
+  if (num===6){
+    return 'SIX';
+  }
+  if (num===7){
+    return 'SEVEN';
+  }
+  if (num===8){
+    return 'EIGHT';
+  }
+  if (num===9){
+    return 'NINE';
+  }
+}
 
 
 gameScene.generateWorkNums = function(){
