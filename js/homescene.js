@@ -23,7 +23,7 @@ homeScene.create = function() {
     // create the text for the start button
     let startText = this.add.text(gameWidth/2, gameHeight - 150, 'START', {
         font: '40px Arial',
-        fill: '#ffffff'
+        fill: '#000000'
     });
     startText.setOrigin(0.5, 0.5);
     startText.depth = 10;

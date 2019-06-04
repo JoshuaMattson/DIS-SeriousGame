@@ -7,7 +7,7 @@ bootScene.preload = function() {
     // log we are now in "Boot Scene"
     console.log("Started Scene: Boot");
 
-    this.load.image('logo', 'assets/images/heart.png');
+    this.load.image('logo', 'assets/images/brain.png');
 };
 
 // change to loading screen directly in create, after preload is done

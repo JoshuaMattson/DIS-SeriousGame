@@ -25,12 +25,12 @@ loadingScene.preload = function() {
 
     let loadingBarBackground = this.add.graphics();
     loadingBarBackground.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
-    loadingBarBackground.fillStyle("#000000", 0.2);
+    loadingBarBackground.fillStyle("#ffffff", 0.2);
     loadingBarBackground.fillRect(0, 0, loadingBarWidth, loadingBarHeight);
 
     let loadingBar = this.add.graphics();
     loadingBar.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
-    loadingBar.fillStyle("#222222", 1);
+    loadingBar.fillStyle("#000000", 1);
     loadingBar.fillRect(0, 0, 0, loadingBarHeight);
 
     // to update the loading bar, we will add an eventlistener to the 'progress' event of the load manager from
@@ -38,14 +38,14 @@ loadingScene.preload = function() {
     this.load.on('progress', function(value){
         // clear progress bar
         loadingBar.clear();
-        loadingBar.fillStyle("#222222", 1);
+        loadingBar.fillStyle("#000000", 1);
         // draw new progress bar, scaled according to value (% of assets loaded)
         loadingBar.fillRect(0, 0, value * loadingBarWidth, loadingBarHeight);
     }, this);
 
     // LOAD ALL ASSETS HERE
     // currently that's of course only the background
-    //this.load.image('background', 'assets/images/background.png');
+    this.load.image('background', 'assets/images/background.png');
 
 };
 
