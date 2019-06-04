@@ -18,8 +18,8 @@ let config = {
 
 // create the game, and pass it the configuration
 let game = new Phaser.Game(config);
-let loadingBarBackground;
-let loadingBar;
+// let loadingBarBackground;
+// let loadingBar;
 let loadingBarWidth = 150;
 let loadingBarHeight = 30;
 
@@ -42,15 +42,15 @@ gameScene.preload = function() {
   let gameWidth = this.sys.game.config.width;
   let gameHeight = this.sys.game.config.height;
 
-  loadingBarBackground = this.add.graphics();
-  loadingBarBackground.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
-  loadingBarBackground.fillStyle("#000000", 0.2);
-  loadingBarBackground.fillRect(0, 0, loadingBarWidth, loadingBarHeight);
-
-  loadingBar = this.add.graphics();
-  loadingBar.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
-  loadingBar.fillStyle("#222222", 1);
-  loadingBar.fillRect(0, 0, 0, loadingBarHeight);
+  // loadingBarBackground = this.add.graphics();
+  // loadingBarBackground.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
+  // loadingBarBackground.fillStyle("#000000", 0.2);
+  // loadingBarBackground.fillRect(0, 0, loadingBarWidth, loadingBarHeight);
+  //
+  // loadingBar = this.add.graphics();
+  // loadingBar.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
+  // loadingBar.fillStyle("#222222", 1);
+  // loadingBar.fillRect(0, 0, 0, loadingBarHeight);
 
   // to update the loading bar, we will add an eventlistener to the 'progress' event of the load manager from
   // our loading scene. This is fired every time an asset is loaded and has a value of 0-1 (% of assets loaded)
@@ -84,23 +84,43 @@ gameScene.create = function() {
     this.background.width = config.width;
     this.background.height = config.height;
 
-    this.healthBar = new HealthBar(this, config.width/2, config.height/2);
-
-
-
-
+    // this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //sleep minigame
     this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
     //this.sleepButton.setScale(scale);
     this.setInteractive(this.sleepButton);
     this.socialGame();
+
+    this.heart = this.add.sprite(config.width/2-260, config.height-55, 'heart');
+    this.heart.setScale(1.2);
+
+    this.healthBar = new HealthBar(this, config.width/2-250, config.height - 70, 507);
+    this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 100, 160);
+    this.socialBar = new MinigameBar(this, config.width-225, config.height - 80, 160);
+    this.foodBar = new MinigameBar(this, config.width-225, config.height - 60, 160);
+    this.sleepBar = new MinigameBar(this, config.width-225, config.height - 40, 160);
+    this.workBar = new MinigameBar(this, config.width-225, config.height - 20, 160);
+
 };
 
 gameScene.update = function() {
-  this.healthBar.decrease(0.1);
-  if (socialGame.complete) {
-    this.healthBar,increase(0.5);
+  this.exerciseBar.decrease(0.02);
+  this.socialBar.decrease(0.01);
+  this.foodBar.decrease(0.04);
+  this.sleepBar.decrease(0.03);
+  this.workBar.decrease(0.06);
+  if (this.exerciseBar.value < 60 || this.socialBar.value < 60 || this.foodBar.value < 60     ||
+      this.sleepBar.value < 60    || this.workBar.value < 60   || this.exerciseBar.value > 160 ||
+      this.socialBar.value > 160   || this.foodBar.value > 160   || this.sleepBar.value > 160   ||
+      this.workBar.value > 160) {
+    this.healthBar.decrease(0.1);
   }
+  // if (socialGame.complete) {
+  //   this.healthBar.increase(0.5);
+  // }
+  // if (exerciseGame.complete) {
+  //   this.healthBar.increase(0.5);
+  // }
   //sleep minigame
   this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
   //this.sleepButton.setScale(scale);
@@ -156,16 +176,16 @@ function resetItemState(item){
     }
 }
 
-gameScene.gameOver = function(){
-    this.state = GAMESTATE.GAMEOVER;
-    this.time.addEvent({
-        delay: 2000,
-        callbackScope: this,
-        callback: function(){
-            this.scene.start('Home');
-        }
-    }, this);
-};
+// gameScene.gameOver = function(){
+//     this.state = GAMESTATE.GAMEOVER;
+//     this.time.addEvent({
+//         delay: 2000,
+//         callbackScope: this,
+//         callback: function(){
+//             this.scene.start('Home');
+//         }
+//     }, this);
+// };
 
 gameScene.socialGame = function() {
     let complete = true;
@@ -194,4 +214,3 @@ gameScene.socialGame = function() {
 
     //this.input.keyboard.addKeys();
 }
-

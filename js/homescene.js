@@ -42,25 +42,25 @@ homeScene.create = function() {
         startText.height + 20
     );
 
-    this.healthBar = new HealthBar(this, config.width/2, config.height/2 - 20, 100);
-    this.exerciseBar = new HealthBar(this, config.width/2, config.height/2, 70);
-    this.socialBar = new HealthBar(this, config.width/2, config.height/2 + 20, 70);
-    this.foodBar = new HealthBar(this, config.width/2, config.height/2 + 40, 70);
-    this.sleepBar = new HealthBar(this, config.width/2, config.height/2 + 60, 70);
-    this.workBar = new HealthBar(this, config.width/2, config.height/2 + 80, 70);
+    // this.healthBar = new HealthBar(this, config.width/2, config.height/2 - 20, 100);
+    // this.exerciseBar = new HealthBar(this, config.width/2, config.height/2, 70);
+    // this.socialBar = new HealthBar(this, config.width/2, config.height/2 + 20, 70);
+    // this.foodBar = new HealthBar(this, config.width/2, config.height/2 + 40, 70);
+    // this.sleepBar = new HealthBar(this, config.width/2, config.height/2 + 60, 70);
+    // this.workBar = new HealthBar(this, config.width/2, config.height/2 + 80, 70);
 
 };
 
 homeScene.update = function() {
   // this.healthBar.decrease(0.1);
-  this.exerciseBar.decrease(0.2);
-  this.socialBar.decrease(0.12);
-  this.foodBar.decrease(0.08);
-  this.sleepBar.decrease(0.1);
-  this.workBar.decrease(0.06);
-  if (this.exerciseBar.value < 25 || this.socialBar.value < 25 || this.foodBar.value < 25 ||
-     this.sleepBar.value < 25 || this.workBar.value < 25) {
-    this.healthBar.decrease(0.1);
+  // this.exerciseBar.decrease(0.2);
+  // this.socialBar.decrease(0.12);
+  // this.foodBar.decrease(0.08);
+  // this.sleepBar.decrease(0.1);
+  // this.workBar.decrease(0.06);
+  // if (this.exerciseBar.value < 25 || this.socialBar.value < 25 || this.foodBar.value < 25 ||
+  //    this.sleepBar.value < 25 || this.workBar.value < 25) {
+  //   this.healthBar.decrease(0.1);
   }
   // if (socialGame.complete) {
   //   this.healthBar.increase(0.5);
@@ -68,4 +68,4 @@ homeScene.update = function() {
   // if (exerciseGame.complete) {
   //   this.healthBar.increase(0.5);
   // }
-}
+// }

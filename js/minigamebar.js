@@ -1,4 +1,4 @@
-class HealthBar {
+class MinigameBar {
 
     constructor (scene, x, y, value) {
         this.bar = new Phaser.GameObjects.Graphics(scene);
@@ -40,22 +40,24 @@ class HealthBar {
 
         //  BG
         this.bar.fillStyle(0x000000);
-        this.bar.fillRect(this.x, this.y, 500, 30);
+        this.bar.fillRect(this.x, this.y, 200, 16);
 
         //  Health
         this.bar.fillStyle(0xffffff);
-        this.bar.fillRect(this.x+2, this.y+2, 496, 26);
+        this.bar.fillRect(this.x + 2, this.y + 2, 196, 12);
 
-        if (this.value < 30) {
+        if (this.value < 60 || this.value > 160)
+        {
             this.bar.fillStyle(0xff0000);
         }
-        else {
+        else
+        {
             this.bar.fillStyle(0x00ff00);
         }
 
         var d = Math.floor(this.p * this.value);
 
-        this.bar.fillRect(this.x + 2, this.y + 2, d, 26);
+        this.bar.fillRect(this.x + 2, this.y + 2, d, 12);
     }
 
 }
