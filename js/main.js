@@ -128,7 +128,6 @@ gameScene.create = function() {
     //social game
     this.firstPhrase = true;
     this.prevPhrase = 0;
-    this.numSocial = 0;
     this.socialGame();
 
     this.heart = this.add.sprite(config.width/2-260, config.height-55, 'heart');
@@ -217,7 +216,6 @@ gameScene.update = function() {
   gameScene.playerText.setText(gameScene.textWord.substring(0, gameScene.combo.index));
   if (gameScene.newWord === true) {
     gameScene.playerText.setText("");
-    //this.numSocial++;
     gameScene.socialBar.increase(5);
     gameScene.socialGame();
   }
@@ -296,7 +294,8 @@ gameScene.socialGame = function() {
                     "can we talk","how about dinner",
                     "howdy","thank you","see you soon",
                     "coffee at eight", "i wanna party",
-                    "are you free"];
+                    "are you free","i appreciate it",
+                    "is everything all right","heyyo"];
   if(this.firstPhrase == true) {
     wordNum = Math.floor(Math.random() * textWords.length);
     this.prevPhrase = wordNum;
