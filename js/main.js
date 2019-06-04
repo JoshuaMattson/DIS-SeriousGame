@@ -152,6 +152,9 @@ gameScene.update = function() {
   // food minigame
 
 
+  //social game
+  gameScene.playerText.setText(gameScene.textWord.substring(0, gameScene.combo.index));
+
 };
 
 
@@ -198,7 +201,7 @@ gameScene.socialGame = function() {
     let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
     wordNumText.depth = 10;
     gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
-    gameScene.playerText = this.add.text(500, 500, "A Text", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+    gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
     
     this.input.keyboard.on('keycombomatch', function (event) {
 
