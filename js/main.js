@@ -54,7 +54,9 @@ gameScene.create = function() {
     this.background.height = config.height;
 };
 
-gameScene.
+gameScene.update = function() {
+    socialGame();
+}
 
 gameScene.gameOver = function(){
     this.state = GAMESTATE.GAMEOVER;
@@ -66,3 +68,24 @@ gameScene.gameOver = function(){
         }
     }, this);
 };
+
+function socialGame() {
+    let complete = true;
+    let textWords = ["hey", "wassup","hello",
+                    "want to hang out?","how are you?",
+                    "can we talk?","how about dinner?",
+                    "howdy","thank you","see you soon"];
+    if(complete) {
+        let wordNum = Math.floor(Math.random() * textWords.length);
+        console.log(textWords[wordNum]);
+        let wordNumText = gameScene.add.text(this.width/2, this.height - 150, textWords[wordNum], {
+        font: '40px Arial',
+        fill: '#ff0000'
+        });
+        //wordNumText.setOrigin(0.5, 0.5);
+        wordNumText.depth = 10;
+        complete = false;
+    }
+    
+    //this.input.keyboard.addKeys();
+}
