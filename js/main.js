@@ -88,8 +88,6 @@ gameScene.create = function() {
     this.healthBar = new HealthBar(this, config.width/2, config.height/2);
 
 
-
-
     //sleep minigame
     imageSleepkey = this.add.image(150, 100, 'heart').setOrigin(0);
     imageSleepkey.setScale(scale);
@@ -103,14 +101,6 @@ gameScene.update = function() {
   if (socialGame.complete) {
     this.healthBar,increase(0.5);
   }
-  //sleep minigame
-  this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
-  //this.sleepButton.setScale(scale);
-  this.setInteractive(this.sleepButton);
-};
-
-
-
 
   //sleep minigame
   this.input.keyboard.on('keydown_Z', function (event) {
@@ -120,7 +110,9 @@ gameScene.update = function() {
   this.input.keyboard.on('keyup_Z', function (event) {
       imageSleepkey.setScale(scale);
   });
-}
+};
+
+
 gameScene.generateWorkNums = function(){
   let num1 = Math.floor(Math.random()*10);
   let num2 = Math.floor(Math.random()*10);
