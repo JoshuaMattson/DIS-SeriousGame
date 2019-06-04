@@ -9,7 +9,7 @@ let config = {
   width: 1000,
   height: 1000,
   scene: [bootScene, loadingScene, homeScene, gameScene],
-  title: 'Phaser3 Project',
+  title: 'DIS final Project',
   pixelArt: false, //Use anti-aliasing
   backgroundColor: '#ffffff' // white background by default
 };
