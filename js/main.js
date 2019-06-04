@@ -74,7 +74,6 @@ gameScene.preload = function() {
   this.load.image('heart', 'assets/images/heart.png');
   this.load.image('brain', 'assets/images/brain.png');
   this.load.image('background', 'assets/images/background.png');
-
 };
 
 // ass all objects active from the start in the game in create
@@ -100,14 +99,16 @@ gameScene.create = function() {
 };
 
 gameScene.update = function() {
-  // this.load.on('progress', function(value){
-  //     // clear progress bar
-  //     loadingBar.clear();
-  //     loadingBar.fillStyle("#222222", 1);
-  //     // draw new progress bar, scaled according to value (% of assets loaded)
-  //
-  // }, this);
   this.healthBar.decrease(0.1);
+  if (socialGame.complete) {
+    this.healthBar,increase(0.5);
+  }
+  //sleep minigame
+  this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
+  //this.sleepButton.setScale(scale);
+  this.setInteractive(this.sleepButton);
+};
+
 
 
 
@@ -156,7 +157,7 @@ gameScene.socialGame = function() {
                     "want to hang out","how are you",
                     "can we talk","how about dinner",
                     "howdy","thank you","see you soon"];
-    if(complete) {
+    if (complete) {
         let wordNum = Math.floor(Math.random() * textWords.length);
         console.log(textWords[wordNum]);
         let wordNumText = gameScene.add.text(this.width/2, this.height - 150, textWords[wordNum], {
