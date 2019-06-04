@@ -29,9 +29,20 @@ let GAMESTATE = {
 gameScene.init = function() {
     // log we are now in "Game Scene"
     console.log("Started Scene: Game");
-
     this.state = GAMESTATE.READY;
 };
+
+gameScene.preload = function() {
+  this.load.image('apple', 'assets/images/food/Apple.png');
+  this.load.image('bacon', 'assets/images/food/Bacon.png');
+  this.load.image('chicken', 'assets/images/food/Chicken.png');
+  this.load.image('cookie', 'assets/images/food/Cookie.png');
+  this.load.image('potato', 'assets/images/food/Potato.png');
+  this.load.image('steak', 'assets/images/food/Steak.png');
+  this.load.image('character', 'assets/images/characterSprite.png');
+  this.load.image('health', 'assets/images/healthBar.png');
+  this.load.image('heart', 'assets/images/heart.png');
+}
 
 // ass all objects active from the start in the game in create
 gameScene.create = function() {
@@ -42,6 +53,8 @@ gameScene.create = function() {
     this.background.width = config.width;
     this.background.height = config.height;
 };
+
+gameScene.
 
 gameScene.gameOver = function(){
     this.state = GAMESTATE.GAMEOVER;
