@@ -90,6 +90,10 @@ gameScene.create = function() {
     this.background.height = config.height;
 
     this.healthBar = new HealthBar(this, config.width/2, config.height/2);
+    //Work mini games
+    this.generateWorkNums();
+    this.makeWork();
+
 
     //sleep minigame
     imageSleepkey = this.add.image(150, 100, 'heart').setOrigin(0);
@@ -138,20 +142,20 @@ gameScene.update = function() {
 
 
 gameScene.generateWorkNums = function(){
-  let num1 = Math.floor(Math.random()*10);
-  let num2 = Math.floor(Math.random()*10);
-  let num3 = Math.floor(Math.random()*10);
-  this.workNums = [num1, num2, num3];
+  this.workNums = [Math.floor(Math.random()*10),
+  Math.floor(Math.random()*10),
+  Math.floor(Math.random()*10)];
 };
 
 gameScene.makeWork = function(){
-  this.num1 = this.add.text(0, 0, this.workNums.num1, { fontSize: '24px', fill: '#000000' });
-  this.num2 = this.add.text(0, 0, this.workNums.num2, { fontSize: '24px', fill: '#000000' });
-  this.num3 = this.add.text(0, 0, this.workNums.num3, { fontSize: '24px', fill: '#000000' });
-  this.nums = this.add.conatiner(0,0);
-  this.nums.add.existing(num1);
-  this.nums.add.existing(num2);
-  this.nums.add.existing(num3);
+  this.num1 = this.add.text(30, 30, this.workNums[0], { fontSize: '42px', fill: '#000000' });
+  this.num2 = this.add.text(60, 30, this.workNums[1], { fontSize: '42px', fill: '#000000' });
+  this.num3 = this.add.text(90, 30, this.workNums[2], { fontSize: '42px', fill: '#000000' });
+  //this.text = this.add.text(420, 50, 'Work', {fontSize: '42px', fill: '#000000'});
+  this.nums = this.add.container(420,100);
+  this.nums.add(this.num1);
+  this.nums.add(this.num2);
+  this.nums.add(this.num3);
 
 };
 
