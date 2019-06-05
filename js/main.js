@@ -155,13 +155,10 @@ gameScene.create = function() {
 
     this.food = [];
     for(let i = 0; i < 12; i++){
-        let food = this.physics.add.sprite(12 + i * 70, 0, 'food_circle');
-        let bounciness = Phaser.Math.FloatBetween(0.4, 0.8);
-        food.setBounceY(bounciness);
+        let xLocation = Phaser.Math.Between(0, 400);
+        let food = this.physics.add.sprite(xLocation, 0, 'food_circle');
         this.food.push(food);
     }
-
-
 
 
     //sleep minigame
