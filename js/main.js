@@ -181,6 +181,12 @@ gameScene.create = function() {
     this.sleepBar = new MinigameBar(this, config.width-225, config.height - 90, 160);
     this.workBar = new MinigameBar(this, config.width-225, config.height - 50, 160);
 
+
+    //random events
+    this.randomEvent = new RandomEvent();
+    this.timedEvent = this.time.addEvent({ delay: 3500, callback: onTimer, callbackScope: this, loop: true });
+    this.eventText = this.add.text(50, 650, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
+
 };
 
 gameScene.update = function() {
@@ -267,6 +273,9 @@ gameScene.update = function() {
     gameScene.socialBar.increase(5);
     gameScene.socialGame();
   }
+
+  //random events
+  
 
 };
 
@@ -373,4 +382,21 @@ gameScene.socialGame = function() {
   });
 
 
+}
+
+function onTimer() {
+  gameScene.eventText.setText("");
+  gameScene.randomEvent.generate();
+  gameScene.eventText.setText(gameScene.randomEvent.text);
+  if(gameScene.randomEvent.stat === "Work") {
+    gameScene.workBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Sleep") {
+    gameScene.sleepBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Social") {
+    gameScene.socialBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Food") {
+    gameScene.foodBar.decrease(gameScene.randomEvent.magnitude);
+  } else { //Exercise
+    gameScene.exerciseBar.decrease(gameScene.randomEvent.magnitude);
+  }
 }
