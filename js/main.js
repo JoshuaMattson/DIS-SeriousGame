@@ -96,6 +96,8 @@ gameScene.preload = function() {
   this.load.image("sleepButton", "assets/images/sleepButton.png");
   this.load.image("exerciseBall1", "assets/images/darkcircle.png");
   this.load.image("exerciseBall2","assets/images/lightcircle.png");
+
+  this.load.image("texting","assets/images/texting.png");
 };
 
 // ass all objects active from the start in the game in create
@@ -153,6 +155,8 @@ gameScene.create = function() {
     // });
 
     //social game
+    let texting = this.add.image(730, 540, 'texting');
+    texting.setScale(1.3,1);
     this.firstPhrase = true;
     this.prevPhrase = 0;
     this.socialGame();
@@ -355,10 +359,10 @@ gameScene.socialGame = function() {
 
   console.log(textWords[wordNum]);
   gameScene.textWord = textWords[wordNum];
-  let wordNumText = this.add.text(550, 450, gameScene.textWord, {fontSize:'30px',color:'#00aaff',fontFamily: 'Courier New'});
+  let wordNumText = this.add.text(550, 440, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
   wordNumText.depth = 10;
   gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
-  gameScene.playerText = this.add.text(550, 500, "", {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
+  gameScene.playerText = this.add.text(550, 500, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
 
   this.input.keyboard.on('keycombomatch', function (event) {
 
