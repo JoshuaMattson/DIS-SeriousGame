@@ -98,6 +98,8 @@ gameScene.preload = function() {
   this.load.image("sleepButton", "assets/images/sleepButton.png");
   this.load.image("exerciseBall1", "assets/images/darkcircle.png");
   this.load.image("exerciseBall2","assets/images/lightcircle.png");
+
+  this.load.image("texting","assets/images/texting.png");
 };
 
 // ass all objects active from the start in the game in create
@@ -204,6 +206,8 @@ gameScene.create = function() {
     });
 
     //social game
+    let texting = this.add.image(730, 540, 'texting');
+    texting.setScale(1.3,1);
     this.firstPhrase = true;
     this.prevPhrase = 0;
     this.socialGame();
@@ -227,6 +231,12 @@ gameScene.create = function() {
     this.foodBar = new MinigameBar(this, config.width-225, config.height - 130, 160);
     this.sleepBar = new MinigameBar(this, config.width-225, config.height - 90, 160);
     this.workBar = new MinigameBar(this, config.width-225, config.height - 50, 160);
+
+
+    //random events
+    this.randomEvent = new RandomEvent();
+    this.timedEvent = this.time.addEvent({ delay: 3500, callback: onTimer, callbackScope: this, loop: true });
+    this.eventText = this.add.text(50, 650, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
 
 };
 
@@ -292,6 +302,9 @@ gameScene.update = function() {
     gameScene.socialBar.increase(7);
     gameScene.socialGame();
   }
+
+  //random events
+  
 
 };
 
@@ -368,7 +381,9 @@ gameScene.socialGame = function() {
                     "howdy","thank you","see you soon",
                     "coffee at eight", "i wanna party",
                     "are you free","i appreciate it",
-                    "is everything all right","heyyo"];
+                    "is everything all right","heyyo",
+                    "bruh","lmao","xoxo","i love you",
+                    "talk to you later","yeet","wow"];
   if(this.firstPhrase == true) {
     wordNum = Math.floor(Math.random() * textWords.length);
     this.prevPhrase = wordNum;
@@ -382,10 +397,10 @@ gameScene.socialGame = function() {
 
   console.log(textWords[wordNum]);
   gameScene.textWord = textWords[wordNum];
-  let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+  let wordNumText = this.add.text(550, 440, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
   wordNumText.depth = 10;
   gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
-  gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+  gameScene.playerText = this.add.text(550, 500, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
 
   this.input.keyboard.on('keycombomatch', function (event) {
 
@@ -396,4 +411,21 @@ gameScene.socialGame = function() {
   });
 
 
+}
+
+function onTimer() {
+  gameScene.eventText.setText("");
+  gameScene.randomEvent.generate();
+  gameScene.eventText.setText(gameScene.randomEvent.text);
+  if(gameScene.randomEvent.stat === "Work") {
+    gameScene.workBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Sleep") {
+    gameScene.sleepBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Social") {
+    gameScene.socialBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Food") {
+    gameScene.foodBar.decrease(gameScene.randomEvent.magnitude);
+  } else { //Exercise
+    gameScene.exerciseBar.decrease(gameScene.randomEvent.magnitude);
+  }
 }
