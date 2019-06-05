@@ -143,13 +143,16 @@ gameScene.create = function() {
 
     this.heart = this.add.sprite(55, config.height-115, 'heart');
     this.heart.setScale(2);
-    this.food = this.add.sprite(config.width-250, config.height-75, 'apple');
+    this.food = this.add.sprite(config.width-250, config.height-115, 'apple');
     this.food.setScale(1.5);
     this.exercise = this.add.sprite(config.width-250, config.height-190, 'exercise');
     this.exercise.setScale(0.23);
     this.social = this.add.sprite(config.width-250, config.height-155, 'social');
     this.social.setScale(0.2);
-    // this.sleep = this.add.sprite(config.width-250, config.height-80, 'sleep');
+    this.sleep = this.add.sprite(config.width-250, config.height-70, 'sleep');
+    this.sleep.setScale(0.1);
+    this.work = this.add.sprite(config.width-250, config.height-30, 'work');
+    this.work.setScale(0.1);
 
     this.healthBar = new HealthBar(this, 80, config.height - 150, 608);
     this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 210, 160);
@@ -218,6 +221,8 @@ gameScene.update = function() {
   this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
       exerciseBall2.setScale(ball_scale);
   });
+
+  
 
   //workmini game
   this.input.keyboard.on('keydown_'+numtoWord(this.workNums[numCount]), function (event){
@@ -327,14 +332,14 @@ gameScene.socialGame = function() {
   }
   this.firstPhrase = false;
   this.prevPhrase = wordNum;
-  
+
   console.log(textWords[wordNum]);
   gameScene.textWord = textWords[wordNum];
   let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
   wordNumText.depth = 10;
   gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
   gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
-    
+
   this.input.keyboard.on('keycombomatch', function (event) {
 
     console.log('Key Combo matched!');
@@ -342,6 +347,6 @@ gameScene.socialGame = function() {
     wordNumText.setText("");
     gameScene.newWord = true;
   });
-  
-    
+
+
 }
