@@ -118,9 +118,6 @@ gameScene.create = function() {
     this.foodPlayer = new Food_Player(this, 100, 100);
 
 
-
-
-
     //sleep minigame
     imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
@@ -131,10 +128,6 @@ gameScene.create = function() {
     exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
     exerciseBall2.setScale(ball_scale);
 
-    // gameScene.exerciseCombo = this.input.keyboard.createCombo('[]');
-    // this.input.keyboard.on('keycombomatch', function(event) {
-    //   console.log('yeet');
-    // });
 
     // let openBracket = gameScene.input.keyboard.addKey('[');
     // let openDown = openBracket.isDown;
@@ -198,15 +191,6 @@ gameScene.update = function() {
       this.workBar.value > 160) {
     this.healthBar.decrease(0.1);
   }
-  // if (socialGame.complete) {
-  //   this.healthBar.increase(0.5);
-  // }
-  // if (exerciseGame.complete) {
-  //   this.healthBar.increase(0.5);
-  // }
-  //sleep minigame
-  //this.sleepButton.setScale(scale);
-  //this.setInteractive(this.sleepButton);
 
 
 
