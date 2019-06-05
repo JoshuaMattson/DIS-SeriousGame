@@ -1,7 +1,6 @@
 class Food_Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
       super(scene, x, y, "food_player");
-      this.setScale(0.1);
 
       scene.add.existing(this);
       scene.physics.add.existing(this);
@@ -22,7 +21,13 @@ class Food_Player extends Phaser.Physics.Arcade.Sprite {
     }
     else if (this.cursors.right.isDown)
     {
-        this.setVelocityX(300);
+        if (this.x >= 400){
+          this.setVelocityX(0);
+        }
+        else {
+          this.setVelocityX(300);
+        }
+
 
     }
     else
