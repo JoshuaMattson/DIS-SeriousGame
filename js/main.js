@@ -100,14 +100,14 @@ gameScene.create = function() {
 
 
     //sleep minigame
-    imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
-    imageSleepkey.setScale(scale);
+    this.imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
+    this.imageSleepkey.setScale(scale);
 
     // exercise minigame
-    exerciseBall1 = this.add.image(700, 100, 'exerciseBall1').setOrigin(0);
-    exerciseBall1.setScale(ball_scale);
-    exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
-    exerciseBall2.setScale(ball_scale);
+    this.exerciseBall1 = this.add.image(700, 100, 'exerciseBall1').setOrigin(0);
+    this.exerciseBall1.setScale(ball_scale);
+    this.exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
+    this.exerciseBall2.setScale(ball_scale);
 
     //social game
     // this.healthBar = new HealthBar(this, config.width/2, config.height/2);
@@ -130,6 +130,36 @@ gameScene.create = function() {
     this.sleepBar = new MinigameBar(this, config.width-225, config.height - 40, 160);
     this.workBar = new MinigameBar(this, config.width-225, config.height - 20, 160);
 
+    // sleep minigame
+    //
+    //
+    this.input.keyboard.on('keydown_Z', function (event) {
+        gameScene.imageSleepkey.setScale(scale * 1.1);
+    });
+
+    this.input.keyboard.on('keyup_Z', function (event) {
+        gameScene.imageSleepkey.setScale(scale);
+    });
+
+    // exercise minigame
+    //
+    //
+    this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
+        gameScene.exerciseBall1.setScale(ball_scale * 1.1);
+    });
+
+    this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
+        gameScene.exerciseBall1.setScale(ball_scale);
+    });
+
+    this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
+        gameScene.exerciseBall2.setScale(ball_scale * 1.1);
+    });
+
+    this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
+        gameScene.exerciseBall2.setScale(ball_scale);
+    });
+
 };
 
 gameScene.update = function() {
@@ -150,38 +180,18 @@ gameScene.update = function() {
   // if (exerciseGame.complete) {
   //   this.healthBar.increase(0.5);
   // }
-  //sleep minigame
-  //this.sleepButton.setScale(scale);
 
+
+  // food minigame
+  //
+  //
+  this.foodPlayer.update();
 
   // sleep minigame
   //
   //
   this.input.keyboard.on('keydown_Z', function (event) {
       imageSleepkey.setScale(scale * 1.1);
-  });
-
-  this.input.keyboard.on('keyup_Z', function (event) {
-      imageSleepkey.setScale(scale);
-  });
-
-  // exercise minigame
-  //
-  //
-  this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
-      exerciseBall1.setScale(ball_scale * 1.1);
-  });
-
-  this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
-      exerciseBall1.setScale(ball_scale);
-  });
-
-  this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
-      exerciseBall2.setScale(ball_scale * 1.1);
-  });
-
-  this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
-      exerciseBall2.setScale(ball_scale);
   });
 
   //workmini game
@@ -305,28 +315,22 @@ gameScene.socialGame = function() {
   this.firstPhrase = false;
   this.prevPhrase = wordNum;
   
+
   console.log(textWords[wordNum]);
   gameScene.textWord = textWords[wordNum];
   let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
   wordNumText.depth = 10;
   gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
   gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
-    
+
   this.input.keyboard.on('keycombomatch', function (event) {
 
-    let wordNum = Math.floor(Math.random() * textWords.length);
-    console.log(textWords[wordNum]);
-    gameScene.textWord = textWords[wordNum];
-    let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
-    wordNumText.depth = 10;
-    gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
-    gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+    console.log('Key Combo matched!');
+    gameScene.playerText.setText("");
+    wordNumText.setText("");
+    gameScene.newWord = true;
+  });
 
-    this.input.keyboard.on('keycombomatch', function (event) {
-
-        console.log('Key Combo matched!');
-        complete = true;
-    });
 
     //this.input.keyboard.addKeys();
 }
