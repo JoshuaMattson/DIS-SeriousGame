@@ -34,6 +34,7 @@ let game = new Phaser.Game(config);
 // let loadingBar;
 let loadingBarWidth = 150;
 let loadingBarHeight = 30;
+let tracker = 0;
 
 // a simple set of states that the game can assume.
 let GAMESTATE = {
@@ -53,7 +54,6 @@ gameScene.init = function() {
 gameScene.preload = function() {
   let gameWidth = this.sys.game.config.width;
   let gameHeight = this.sys.game.config.height;
-
   // loadingBarBackground = this.add.graphics();
   // loadingBarBackground.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
   // loadingBarBackground.fillStyle("#000000", 0.2);
@@ -131,10 +131,33 @@ gameScene.create = function() {
     exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
     exerciseBall2.setScale(ball_scale);
 
+    // gameScene.exerciseCombo = this.input.keyboard.createCombo('[]');
+    // this.input.keyboard.on('keycombomatch', function(event) {
+    //   console.log('yeet');
+    // });
 
-    // this.healthBar = new HealthBar(this, config.width/2, config.height/2);
-    //sleep minigame    //this.sleepButton.setScale(scale);
-    //this.setInteractive(this.sleepButton);
+    // let openBracket = gameScene.input.keyboard.addKey('[');
+    // let openDown = openBracket.isDown;
+
+    // this.openBracket.on('down', function(event) {
+    //   if (tracker === 0) {
+    //     tracker = 1;
+    //   }
+    //   else {
+    //     tracker = 0;
+    //   }
+    // });
+    // let closedBracket = gameScene.input.keyboard.addKey(']');
+    // let closedDown = openBracket.isDown;
+
+    // this.closedBracket.on('down', function(event) {
+    //   if (tracker === 1) {
+    //     tracker = 2;
+    //   }
+    //   else if (tracker === 0) {
+    //     tracker = 0;
+    //   }
+    // });
 
     //social game
     this.firstPhrase = true;
@@ -165,10 +188,10 @@ gameScene.create = function() {
 
 gameScene.update = function() {
   this.exerciseBar.decrease(0.02);
-  this.socialBar.decrease(0.05);
-  this.foodBar.decrease(0.04);
-  this.sleepBar.decrease(0.03);
-  this.workBar.decrease(0.06);
+  this.socialBar.decrease(0.02);
+  this.foodBar.decrease(0.02);
+  this.sleepBar.decrease(0.02);
+  this.workBar.decrease(0.02);
   if (this.exerciseBar.value < 60 || this.socialBar.value < 60 || this.foodBar.value < 60     ||
       this.sleepBar.value < 60    || this.workBar.value < 60   || this.exerciseBar.value > 160 ||
       this.socialBar.value > 160   || this.foodBar.value > 160   || this.sleepBar.value > 160   ||
@@ -208,6 +231,12 @@ gameScene.update = function() {
   //
   this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
       exerciseBall1.setScale(ball_scale * 1.1);
+      if (tracker === 0) {
+        tracker = 1;
+      }
+      else if (tracker === 1) {
+        tracker = 0;
+      }
   });
 
   this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
@@ -216,13 +245,19 @@ gameScene.update = function() {
 
   this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
       exerciseBall2.setScale(ball_scale * 1.1);
+      if (tracker === 1) {
+        tracker = 2;
+      }
   });
 
   this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
       exerciseBall2.setScale(ball_scale);
   });
+  if (tracker === 2) {
+    this.exerciseBar.increase(5);
+    tracker = 0;
+  }
 
-  
 
   //workmini game
   this.input.keyboard.on('keydown_'+numtoWord(this.workNums[numCount]), function (event){
@@ -232,7 +267,6 @@ gameScene.update = function() {
     }
     numCount++;
   });
-
 
 
   // food minigame
