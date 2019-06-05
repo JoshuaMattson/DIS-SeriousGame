@@ -112,10 +112,7 @@ gameScene.create = function() {
     //
     this.foodPlayer = new Food_Player(this, 100, 100);
 
-
-
-
-
+    
     //sleep minigame
     imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
@@ -126,7 +123,7 @@ gameScene.create = function() {
     exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
     exerciseBall2.setScale(ball_scale);
 
-   
+
     // this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //sleep minigame
     this.sleepButton = this.add.sprite(config.width/4, config.height/4, "heart");
@@ -318,14 +315,14 @@ gameScene.socialGame = function() {
   }
   this.firstPhrase = false;
   this.prevPhrase = wordNum;
-  
+
   console.log(textWords[wordNum]);
   gameScene.textWord = textWords[wordNum];
   let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
   wordNumText.depth = 10;
   gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
   gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
-    
+
   this.input.keyboard.on('keycombomatch', function (event) {
 
     console.log('Key Combo matched!');
@@ -333,6 +330,6 @@ gameScene.socialGame = function() {
     wordNumText.setText("");
     gameScene.newWord = true;
   });
-  
-    
+
+
 }
