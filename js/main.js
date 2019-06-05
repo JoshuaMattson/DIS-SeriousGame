@@ -19,7 +19,7 @@ let config = {
       default: 'arcade',
       arcade: {
           gravity: { y: 2000 },
-          debug: false
+          debug: true
       }
   },
   scene: [bootScene, loadingScene, homeScene, gameScene],
@@ -87,6 +87,8 @@ gameScene.preload = function() {
   this.load.image('background', 'assets/images/background.png');
 
   this.load.image("food_player","assets/images/food_player.png");
+  this.load.image("food_circle","assets/images/food_circle.png");
+
 
   this.load.image("sleepButton", "assets/images/sleepButton.png");
   this.load.image("exerciseBall1", "assets/images/darkcircle.png");
@@ -102,6 +104,40 @@ gameScene.create = function() {
     this.background.width = config.width;
     this.background.height = config.height;
 
+
+
+
+    // sleep minigame
+    //
+    //
+    this.input.keyboard.on('keydown_Z', function (event) {
+        imageSleepkey.setScale(scale * 1.1);
+    });
+
+    this.input.keyboard.on('keyup_Z', function (event) {
+        imageSleepkey.setScale(scale);
+    });
+
+    // exercise minigame
+    //
+    //
+    this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
+        exerciseBall1.setScale(ball_scale * 1.1);
+    });
+
+    this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
+        exerciseBall1.setScale(ball_scale);
+    });
+
+    this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
+        exerciseBall2.setScale(ball_scale * 1.1);
+    });
+
+    this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
+        exerciseBall2.setScale(ball_scale);
+    });
+
+
     //this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //Work mini games
     this.generateWorkNums();
@@ -110,11 +146,21 @@ gameScene.create = function() {
     // food minigame
     //
     //
-    this.foodPlayer = new Food_Player(this, 100, 100);
+    this.foodPlayer = new Food_Player(this, 100, 700);
+
+    this.food = [];
+    for(let i = 0; i < 12; i++){
+        let food = this.physics.add.sprite(12 + i * 70, 0, 'food_circle');
+        let bounciness = Phaser.Math.FloatBetween(0.4, 0.8);
+        food.setBounceY(bounciness);
+        this.food.push(food);
+    }
+
+    
 
 
     //sleep minigame
-    imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
+    imageSleepkey = this.add.image(50, 50, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
 
     // exercise minigame
@@ -161,35 +207,7 @@ gameScene.update = function() {
   //
   this.foodPlayer.update();
 
-  // sleep minigame
-  //
-  //
-  this.input.keyboard.on('keydown_Z', function (event) {
-      imageSleepkey.setScale(scale * 1.1);
-  });
 
-  this.input.keyboard.on('keyup_Z', function (event) {
-      imageSleepkey.setScale(scale);
-  });
-
-  // exercise minigame
-  //
-  //
-  this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
-      exerciseBall1.setScale(ball_scale * 1.1);
-  });
-
-  this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
-      exerciseBall1.setScale(ball_scale);
-  });
-
-  this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
-      exerciseBall2.setScale(ball_scale * 1.1);
-  });
-
-  this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
-      exerciseBall2.setScale(ball_scale);
-  });
 
   //workmini game
   this.input.keyboard.on('keydown_'+numtoWord(this.workNums[numCount]), function (event){
