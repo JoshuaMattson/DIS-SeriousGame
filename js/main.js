@@ -8,7 +8,7 @@ let scale = 0.5;
 let ball_scale = 0.25;
 var imageSleepkey;
 
-let numCount = 0;
+let numsExist = false;
 
 // our game's configuration
 let config = {
@@ -192,15 +192,6 @@ gameScene.update = function() {
   });
 
   //workmini game
-  this.input.keyboard.on('keydown_'+numtoWord(this.workNums[numCount]), function (event){
-    if (numCount===0) {
-      gameScene.num1.setFill('#30e83c');
-      gameScene.num1.setFontSize('40px');
-    }
-    numCount++;
-  });
-
-
 
   // food minigame
 
@@ -256,16 +247,48 @@ gameScene.generateWorkNums = function(){
 };
 
 gameScene.makeWork = function(){
-  this.num1 = this.add.text(30, 30, this.workNums[0], { fontSize: '42px', fill: '#000000' });
-  this.num2 = this.add.text(60, 30, this.workNums[1], { fontSize: '42px', fill: '#000000' });
-  this.num3 = this.add.text(90, 30, this.workNums[2], { fontSize: '42px', fill: '#000000' });
-  //this.text = this.add.text(420, 50, 'Work', {fontSize: '42px', fill: '#000000'});
-  this.nums = this.add.container(420,100);
-  this.nums.add(this.num1);
-  this.nums.add(this.num2);
-  this.nums.add(this.num3);
+  if (!numsExist){
+  this.num0 = this.add.text(450, 100, this.workNums[0], { fontSize: '50px', fill: '#000000' });
+  this.num1 = this.add.text(480, 100, this.workNums[1], { fontSize: '50px', fill: '#000000' });
+  this.num2 = this.add.text(510, 100, this.workNums[2], { fontSize: '50px', fill: '#000000' });
+  workListeners();
+  numsExist=true;
+} else {
+  gameScene.num0.setText(gameScene.workNums[0]);
+  gameScene.num0.setFill('#000000');
+  gameScene.num0.setFontSize('50px');
+
+  gameScene.num1.setText(gameScene.workNums[1]);
+  gameScene.num1.setFill('#000000');
+  gameScene.num1.setFontSize('50px');
+
+  gameScene.num2.setText(gameScene.workNums[2]);
+  gameScene.num2.setFill('#000000');
+  gameScene.num2.setFontSize('50px');
+
+  workListeners();
+}
+
 
 };
+
+function workListeners() {
+  gameScene.input.keyboard.once('keydown_'+numtoWord(gameScene.workNums[0]), function(event) {
+    gameScene.num0.setFill('#30e83c');
+    gameScene.num0.setFontSize('40px');
+    gameScene.input.keyboard.once('keydown_'+numtoWord(gameScene.workNums[1]), function(event) {
+      gameScene.num1.setFill('#30e83c');
+      gameScene.num1.setFontSize('40px');
+      gameScene.input.keyboard.once('keydown_'+numtoWord(gameScene.workNums[2]), function(event) {
+        gameScene.num2.setFill('#30e83c');
+        gameScene.num2.setFontSize('40px');
+        gameScene.generateWorkNums();
+        gameScene.makeWork();
+      });
+    });
+  });
+}
+
 
 
 // gameScene.gameOver = function(){
