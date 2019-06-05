@@ -118,39 +118,50 @@ gameScene.create = function() {
     this.foodPlayer = new Food_Player(this, 100, 100);
 
 
+
+
+
     //sleep minigame
     imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
+    this.input.keyboard.on('keydown_Z', function (event) {
+        imageSleepkey.setScale(scale * 1.1);
+        gameScene.sleepBar.increase(0.5);
+    });
+
+    this.input.keyboard.on('keyup_Z', function (event) {
+        imageSleepkey.setScale(scale);
+    });
 
     // exercise minigame
     exerciseBall1 = this.add.image(700, 100, 'exerciseBall1').setOrigin(0);
     exerciseBall1.setScale(ball_scale);
     exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
     exerciseBall2.setScale(ball_scale);
+    this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
+        exerciseBall1.setScale(ball_scale * 1.1);
+        if (tracker === 0) {
+          tracker = 1;
+        }
+        else if (tracker === 1) {
+          tracker = 0;
+        }
+    });
 
+    this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
+        exerciseBall1.setScale(ball_scale);
+    });
 
-    // let openBracket = gameScene.input.keyboard.addKey('[');
-    // let openDown = openBracket.isDown;
+    this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
+        exerciseBall2.setScale(ball_scale * 1.1);
+        if (tracker === 1) {
+          tracker = 2;
+        }
+    });
 
-    // this.openBracket.on('down', function(event) {
-    //   if (tracker === 0) {
-    //     tracker = 1;
-    //   }
-    //   else {
-    //     tracker = 0;
-    //   }
-    // });
-    // let closedBracket = gameScene.input.keyboard.addKey(']');
-    // let closedDown = openBracket.isDown;
-
-    // this.closedBracket.on('down', function(event) {
-    //   if (tracker === 1) {
-    //     tracker = 2;
-    //   }
-    //   else if (tracker === 0) {
-    //     tracker = 0;
-    //   }
-    // });
+    this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
+        exerciseBall2.setScale(ball_scale);
+    });
 
     //social game
     this.firstPhrase = true;
@@ -180,17 +191,26 @@ gameScene.create = function() {
 };
 
 gameScene.update = function() {
-  this.exerciseBar.decrease(0.02);
-  this.socialBar.decrease(0.02);
-  this.foodBar.decrease(0.02);
-  this.sleepBar.decrease(0.02);
-  this.workBar.decrease(0.02);
+  this.exerciseBar.decrease(0.05);
+  this.socialBar.decrease(0.05);
+  this.foodBar.decrease(0.05);
+  this.sleepBar.decrease(0.05);
+  this.workBar.decrease(0.05);
   if (this.exerciseBar.value < 60 || this.socialBar.value < 60 || this.foodBar.value < 60     ||
       this.sleepBar.value < 60    || this.workBar.value < 60   || this.exerciseBar.value > 160 ||
       this.socialBar.value > 160   || this.foodBar.value > 160   || this.sleepBar.value > 160   ||
       this.workBar.value > 160) {
     this.healthBar.decrease(0.1);
   }
+  // if (socialGame.complete) {
+  //   this.healthBar.increase(0.5);
+  // }
+  // if (exerciseGame.complete) {
+  //   this.healthBar.increase(0.5);
+  // }
+  //sleep minigame
+  //this.sleepButton.setScale(scale);
+  //this.setInteractive(this.sleepButton);
 
 
 
@@ -202,43 +222,12 @@ gameScene.update = function() {
   // sleep minigame
   //
   //
-  this.input.keyboard.on('keydown_Z', function (event) {
-      imageSleepkey.setScale(scale * 1.1);
-  });
-
-  this.input.keyboard.on('keyup_Z', function (event) {
-      imageSleepkey.setScale(scale);
-  });
 
   // exercise minigame
   //
   //
-  this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
-      exerciseBall1.setScale(ball_scale * 1.1);
-      if (tracker === 0) {
-        tracker = 1;
-      }
-      else if (tracker === 1) {
-        tracker = 0;
-      }
-  });
-
-  this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
-      exerciseBall1.setScale(ball_scale);
-  });
-
-  this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
-      exerciseBall2.setScale(ball_scale * 1.1);
-      if (tracker === 1) {
-        tracker = 2;
-      }
-  });
-
-  this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
-      exerciseBall2.setScale(ball_scale);
-  });
   if (tracker === 2) {
-    this.exerciseBar.increase(5);
+    this.exerciseBar.increase(2);
     tracker = 0;
   }
 
@@ -260,7 +249,7 @@ gameScene.update = function() {
   gameScene.playerText.setText(gameScene.textWord.substring(0, gameScene.combo.index));
   if (gameScene.newWord === true) {
     gameScene.playerText.setText("");
-    gameScene.socialBar.increase(5);
+    gameScene.socialBar.increase(7);
     gameScene.socialGame();
   }
 

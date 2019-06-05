@@ -34,8 +34,7 @@ class MinigameBar {
         return (this.value === 200);
     }
 
-    draw ()
-    {
+    draw() {
         this.bar.clear();
 
         //  BG
@@ -59,5 +58,4 @@ class MinigameBar {
 
         this.bar.fillRect(this.x + 2, this.y + 2, d, 31);
     }
-
 }
