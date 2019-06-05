@@ -8,20 +8,13 @@ let scale = 0.5;
 let ball_scale = 0.25;
 var imageSleepkey;
 
-let numCount = 0;
+let numsExist = false;
 
 // our game's configuration
 let config = {
   type: Phaser.AUTO,
   width: 1000,
   height: 1000,
-  physics: {
-      default: 'arcade',
-      arcade: {
-          gravity: { y: 2000 },
-          debug: false
-      }
-  },
   scene: [bootScene, loadingScene, homeScene, gameScene],
   title: 'DIS final Project',
   pixelArt: false, //Use anti-aliasing
@@ -107,15 +100,11 @@ gameScene.create = function() {
     this.background.width = config.width;
     this.background.height = config.height;
 
-    //this.healthBar = new HealthBar(this, config.width/2, config.height/2);
+    this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //Work mini games
     this.generateWorkNums();
     this.makeWork();
 
-    // food minigame
-    //
-    //
-    this.foodPlayer = new Food_Player(this, 100, 100);
 
 
 
@@ -188,6 +177,36 @@ gameScene.create = function() {
     this.sleepBar = new MinigameBar(this, config.width-225, config.height - 90, 160);
     this.workBar = new MinigameBar(this, config.width-225, config.height - 50, 160);
 
+    // sleep minigame
+    //
+    //
+    this.input.keyboard.on('keydown_Z', function (event) {
+        gameScene.imageSleepkey.setScale(scale * 1.1);
+    });
+
+    this.input.keyboard.on('keyup_Z', function (event) {
+        gameScene.imageSleepkey.setScale(scale);
+    });
+
+    // exercise minigame
+    //
+    //
+    this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
+        gameScene.exerciseBall1.setScale(ball_scale * 1.1);
+    });
+
+    this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
+        gameScene.exerciseBall1.setScale(ball_scale);
+    });
+
+    this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
+        gameScene.exerciseBall2.setScale(ball_scale * 1.1);
+    });
+
+    this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
+        gameScene.exerciseBall2.setScale(ball_scale);
+    });
+
 };
 
 gameScene.update = function() {
@@ -213,7 +232,6 @@ gameScene.update = function() {
   //this.setInteractive(this.sleepButton);
 
 
-
   // food minigame
   //
   //
@@ -233,13 +251,6 @@ gameScene.update = function() {
 
 
   //workmini game
-  this.input.keyboard.on('keydown_'+numtoWord(this.workNums[numCount]), function (event){
-    if (numCount===0) {
-      gameScene.num1.setFill('#30e83c');
-      gameScene.num1.setFontSize('40px');
-    }
-    numCount++;
-  });
 
 
   // food minigame
@@ -296,14 +307,36 @@ gameScene.generateWorkNums = function(){
 };
 
 gameScene.makeWork = function(){
-  this.num1 = this.add.text(30, 30, this.workNums[0], { fontSize: '42px', fill: '#000000' });
-  this.num2 = this.add.text(60, 30, this.workNums[1], { fontSize: '42px', fill: '#000000' });
-  this.num3 = this.add.text(90, 30, this.workNums[2], { fontSize: '42px', fill: '#000000' });
+  if (numsExist===false){
+  this.num0 = this.add.text(30, 30, this.workNums[0], { fontSize: '50px', fill: '#000000' });
+  this.num1 = this.add.text(60, 30, this.workNums[1], { fontSize: '50px', fill: '#000000' });
+  this.num2 = this.add.text(90, 30, this.workNums[2], { fontSize: '50px', fill: '#000000' });
   //this.text = this.add.text(420, 50, 'Work', {fontSize: '42px', fill: '#000000'});
   this.nums = this.add.container(420,100);
+  this.nums.add(this.num0);
   this.nums.add(this.num1);
   this.nums.add(this.num2);
-  this.nums.add(this.num3);
+  this.input.keyboard.on('keydown', function (event){
+    if (event.key === gameScene.workNums[0]) {
+      gameScene.num0.setFill('#30e83c');
+      gameScene.num0.setFontSize('40px');
+    }
+  });
+
+  numsExist = true;
+} else {
+  this.num0.setText(this.workNums[0]);
+  this.num0.setFontSize('50px');
+  this.num0.setFill('#000000');
+
+  this.num1.setText(this.workNums[1]);
+  this.num1.setFontSize('50px');
+  this.num1.setFill('#000000');
+
+  this.num2.setText(this.workNums[2]);
+  this.num2.setFontSize('50px');
+  this.num2.setFill('#000000');
+}
 
 };
 
@@ -320,9 +353,8 @@ gameScene.makeWork = function(){
 // };
 
 gameScene.socialGame = function() {
-  gameScene.newWord = false;
-  let wordnum = 0;
-  let textWords = ["hey", "wassup","hello",
+    complete = true;
+    let textWords = ["hey", "wassup","hello",
                     "want to hang out","how are you",
                     "can we talk","how about dinner",
                     "howdy","thank you","see you soon",
@@ -339,6 +371,8 @@ gameScene.socialGame = function() {
   }
   this.firstPhrase = false;
   this.prevPhrase = wordNum;
+  
+
 
   console.log(textWords[wordNum]);
   gameScene.textWord = textWords[wordNum];
