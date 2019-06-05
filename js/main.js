@@ -339,7 +339,9 @@ gameScene.socialGame = function() {
                     "howdy","thank you","see you soon",
                     "coffee at eight", "i wanna party",
                     "are you free","i appreciate it",
-                    "is everything all right","heyyo"];
+                    "is everything all right","heyyo",
+                    "bruh","lmao","xoxo","i love you",
+                    "talk to you later","yeet","wow"];
   if(this.firstPhrase == true) {
     wordNum = Math.floor(Math.random() * textWords.length);
     this.prevPhrase = wordNum;
@@ -353,10 +355,10 @@ gameScene.socialGame = function() {
 
   console.log(textWords[wordNum]);
   gameScene.textWord = textWords[wordNum];
-  let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+  let wordNumText = this.add.text(550, 450, gameScene.textWord, {fontSize:'30px',color:'#00aaff',fontFamily: 'Courier New'});
   wordNumText.depth = 10;
   gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
-  gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+  gameScene.playerText = this.add.text(550, 500, "", {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
 
   this.input.keyboard.on('keycombomatch', function (event) {
 
