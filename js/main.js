@@ -27,6 +27,7 @@ let game = new Phaser.Game(config);
 // let loadingBar;
 let loadingBarWidth = 150;
 let loadingBarHeight = 30;
+let tracker = 0;
 
 // a simple set of states that the game can assume.
 let GAMESTATE = {
@@ -46,7 +47,6 @@ gameScene.init = function() {
 gameScene.preload = function() {
   let gameWidth = this.sys.game.config.width;
   let gameHeight = this.sys.game.config.height;
-
   // loadingBarBackground = this.add.graphics();
   // loadingBarBackground.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
   // loadingBarBackground.fillStyle("#000000", 0.2);
@@ -67,12 +67,19 @@ gameScene.preload = function() {
   //     loadingBar.fillRect(0, 0, value * loadingBarWidth, loadingBarHeight);
   // }, this);
 
+  this.load.image("food_player","assets/images/food_player.png");
   this.load.image('apple', 'assets/images/food/Apple.png');
   this.load.image('bacon', 'assets/images/food/Bacon.png');
   this.load.image('chicken', 'assets/images/food/Chicken.png');
   this.load.image('cookie', 'assets/images/food/Cookie.png');
   this.load.image('potato', 'assets/images/food/Potato.png');
   this.load.image('steak', 'assets/images/food/Steak.png');
+
+  this.load.image('exercise', 'assets/images/dumbbell.png');
+  this.load.image('social', 'assets/images/social.png');
+  this.load.image('work', 'assets/images/work.png');
+  this.load.image('sleep', 'assets/images/sleep.png');
+
   this.load.image('character', 'assets/images/characterSprite.png');
   this.load.image('health', 'assets/images/healthBar.png');
   this.load.image('heart', 'assets/images/heart.png');
@@ -99,6 +106,7 @@ gameScene.create = function() {
     this.makeWork();
 
 
+
     //sleep minigame
     this.imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
     this.imageSleepkey.setScale(scale);
@@ -115,20 +123,53 @@ gameScene.create = function() {
     //this.sleepButton.setScale(scale);
     //this.setInteractive(this.sleepButton);
 
+    // let openBracket = gameScene.input.keyboard.addKey('[');
+    // let openDown = openBracket.isDown;
+
+    // this.openBracket.on('down', function(event) {
+    //   if (tracker === 0) {
+    //     tracker = 1;
+    //   }
+    //   else {
+    //     tracker = 0;
+    //   }
+    // });
+    // let closedBracket = gameScene.input.keyboard.addKey(']');
+    // let closedDown = openBracket.isDown;
+
+    // this.closedBracket.on('down', function(event) {
+    //   if (tracker === 1) {
+    //     tracker = 2;
+    //   }
+    //   else if (tracker === 0) {
+    //     tracker = 0;
+    //   }
+    // });
+
     //social game
     this.firstPhrase = true;
     this.prevPhrase = 0;
     this.socialGame();
 
-    this.heart = this.add.sprite(config.width/2-260, config.height-55, 'heart');
-    this.heart.setScale(1.2);
+    this.heart = this.add.sprite(55, config.height-115, 'heart');
+    this.heart.setScale(2);
+    this.food = this.add.sprite(config.width-250, config.height-115, 'apple');
+    this.food.setScale(1.5);
+    this.exercise = this.add.sprite(config.width-250, config.height-190, 'exercise');
+    this.exercise.setScale(0.23);
+    this.social = this.add.sprite(config.width-250, config.height-155, 'social');
+    this.social.setScale(0.2);
+    this.sleep = this.add.sprite(config.width-250, config.height-70, 'sleep');
+    this.sleep.setScale(0.1);
+    this.work = this.add.sprite(config.width-250, config.height-30, 'work');
+    this.work.setScale(0.1);
 
-    this.healthBar = new HealthBar(this, config.width/2-250, config.height - 70, 507);
-    this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 100, 160);
-    this.socialBar = new MinigameBar(this, config.width-225, config.height - 80, 160);
-    this.foodBar = new MinigameBar(this, config.width-225, config.height - 60, 160);
-    this.sleepBar = new MinigameBar(this, config.width-225, config.height - 40, 160);
-    this.workBar = new MinigameBar(this, config.width-225, config.height - 20, 160);
+    this.healthBar = new HealthBar(this, 80, config.height - 150, 608);
+    this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 210, 160);
+    this.socialBar = new MinigameBar(this, config.width-225, config.height - 170, 160);
+    this.foodBar = new MinigameBar(this, config.width-225, config.height - 130, 160);
+    this.sleepBar = new MinigameBar(this, config.width-225, config.height - 90, 160);
+    this.workBar = new MinigameBar(this, config.width-225, config.height - 50, 160);
 
     // sleep minigame
     //
@@ -164,22 +205,16 @@ gameScene.create = function() {
 
 gameScene.update = function() {
   this.exerciseBar.decrease(0.02);
-  this.socialBar.decrease(0.01);
-  this.foodBar.decrease(0.04);
-  this.sleepBar.decrease(0.03);
-  this.workBar.decrease(0.06);
+  this.socialBar.decrease(0.02);
+  this.foodBar.decrease(0.02);
+  this.sleepBar.decrease(0.02);
+  this.workBar.decrease(0.02);
   if (this.exerciseBar.value < 60 || this.socialBar.value < 60 || this.foodBar.value < 60     ||
       this.sleepBar.value < 60    || this.workBar.value < 60   || this.exerciseBar.value > 160 ||
       this.socialBar.value > 160   || this.foodBar.value > 160   || this.sleepBar.value > 160   ||
       this.workBar.value > 160) {
     this.healthBar.decrease(0.1);
   }
-  // if (socialGame.complete) {
-  //   this.healthBar.increase(0.5);
-  // }
-  // if (exerciseGame.complete) {
-  //   this.healthBar.increase(0.5);
-  // }
 
 
   // food minigame
@@ -194,7 +229,45 @@ gameScene.update = function() {
       imageSleepkey.setScale(scale * 1.1);
   });
 
+  this.input.keyboard.on('keyup_Z', function (event) {
+      imageSleepkey.setScale(scale);
+  });
+
+  // exercise minigame
+  //
+  //
+  this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
+      exerciseBall1.setScale(ball_scale * 1.1);
+      if (tracker === 0) {
+        tracker = 1;
+      }
+      else if (tracker === 1) {
+        tracker = 0;
+      }
+  });
+
+  this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
+      exerciseBall1.setScale(ball_scale);
+  });
+
+  this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
+      exerciseBall2.setScale(ball_scale * 1.1);
+      if (tracker === 1) {
+        tracker = 2;
+      }
+  });
+
+  this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
+      exerciseBall2.setScale(ball_scale);
+  });
+  if (tracker === 2) {
+    this.exerciseBar.increase(5);
+    tracker = 0;
+  }
+
+
   //workmini game
+
 
   // food minigame
 
@@ -316,6 +389,7 @@ gameScene.socialGame = function() {
   this.prevPhrase = wordNum;
   
 
+
   console.log(textWords[wordNum]);
   gameScene.textWord = textWords[wordNum];
   let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
@@ -332,5 +406,4 @@ gameScene.socialGame = function() {
   });
 
 
-    //this.input.keyboard.addKeys();
 }
