@@ -11,37 +11,37 @@ class RandomEvent {
         let seedNum = Math.floor(Math.random() * numEvents);
 
         if (seedNum === 0) {
-            this.text = "You just can't seem to focus today. (-20 Work)";
+            this.text = "You just can't seem to focus today. (-10 Work)";
             this.stat = "Work";
-            this.magnitude = 20;
+            this.magnitude = 10;
         } else if (seedNum === 1) {
-            this.text = "It was a long, restless night tossing and turning. (-30 Sleep)";
+            this.text = "It was a long, restless night tossing and turning. (-15 Sleep)";
             this.stat = "Sleep";
-            this.magnitude = 30;
+            this.magnitude = 15;
         } else if (seedNum === 2) {
-            this.text = "The thought of facing the world today is just too much. (-25 Social)";
-            this.stat = "Social";
-            this.magnitude = 25;
-        } else if (seedNum === 3) {
-            this.text = "Finding the motivation to work out has been a problem lately. (-40 Exercise)";
-            this.stat = "Exercise";
-            this.magnitude = 40;
-        } else if (seedNum === 3) {
-            this.text = "The fridge is full but your apetite is nowhere to be seen. (-30 Food)";
-            this.stat = "Food";
-            this.magnitude = 30;
-        } else if (seedNum === 4) {
-            this.text = "Friends are getting together but you just don't have the energy. (-10 Social)";
+            this.text = "The thought of facing the world today is just too much. (-10 Social)";
             this.stat = "Social";
             this.magnitude = 10;
+        } else if (seedNum === 3) {
+            this.text = "Finding the motivation to work out has been a problem lately. (-20 Exercise)";
+            this.stat = "Exercise";
+            this.magnitude = 20;
+        } else if (seedNum === 3) {
+            this.text = "The fridge is full but your apetite is nowhere to be seen. (-15 Food)";
+            this.stat = "Food";
+            this.magnitude = 15;
+        } else if (seedNum === 4) {
+            this.text = "Friends are getting together but you just don't have the energy. (-5 Social)";
+            this.stat = "Social";
+            this.magnitude = 5;
         } else if (seedNum === 5) {
-            this.text = "Up all night with racing thoughts. (-50 Sleep)";
+            this.text = "Up all night with racing thoughts. (-25 Sleep)";
             this.stat = "Sleep";
-            this.magnitude = 50;
+            this.magnitude = 25;
         } else if (seedNum === 6) {
-            this.text = "You've been taking a few too mant days off lately. (-35 Work)";
+            this.text = "You've been taking a few too mant days off lately. (-15 Work)";
             this.stat = "Work";
-            this.magnitude = 35;
+            this.magnitude = 15;
         }
     }
 }
