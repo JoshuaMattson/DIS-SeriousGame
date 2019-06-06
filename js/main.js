@@ -10,6 +10,7 @@ var imageSleepkey;
 
 let numsExist = false;
 
+
 // our game's configuration
 let config = {
   type: Phaser.AUTO,
@@ -22,7 +23,7 @@ let config = {
           debug: true
       }
   },
-  scene: [bootScene, loadingScene, homeScene, gameScene],
+  scene: [bootScene, loadingScene, homeScene, gameScene, gameoverScene],
   title: 'DIS final Project',
   pixelArt: false, //Use anti-aliasing
   backgroundColor: '#ffffff' // white background by default
@@ -98,7 +99,6 @@ gameScene.preload = function() {
   this.load.image("sleepButton", "assets/images/sleepButton.png");
   this.load.image("exerciseBall1", "assets/images/darkcircle.png");
   this.load.image("exerciseBall2","assets/images/lightcircle.png");
-
   this.load.image("texting","assets/images/texting.png");
 };
 
@@ -110,6 +110,7 @@ gameScene.create = function() {
     this.background.depth = -10;
     this.background.width = config.width;
     this.background.height = config.height;
+
 
     //this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //Work mini games
@@ -130,7 +131,7 @@ gameScene.create = function() {
     imageSleepkey.setScale(scale);
     this.input.keyboard.on('keydown_Z', function (event) {
         imageSleepkey.setScale(scale * 1.1);
-        gameScene.sleepBar.increase(0.5);
+        gameScene.sleepBar.increase(0.7);
     });
 
     this.input.keyboard.on('keyup_Z', function (event) {
@@ -174,6 +175,8 @@ gameScene.create = function() {
     this.prevPhrase = 0;
     this.socialGame();
 
+
+    //health bars
     this.heart = this.add.sprite(55, config.height-115, 'heart');
     this.heart.setScale(2);
     this.food = this.add.sprite(config.width-250, config.height-115, 'apple');
@@ -186,45 +189,58 @@ gameScene.create = function() {
     this.sleep.setScale(0.1);
     this.work = this.add.sprite(config.width-250, config.height-30, 'work');
     this.work.setScale(0.1);
-
     this.healthBar = new HealthBar(this, 80, config.height - 150, 608);
-    this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 210, 160);
-    this.socialBar = new MinigameBar(this, config.width-225, config.height - 170, 160);
-    this.foodBar = new MinigameBar(this, config.width-225, config.height - 130, 160);
-    this.sleepBar = new MinigameBar(this, config.width-225, config.height - 90, 160);
-    this.workBar = new MinigameBar(this, config.width-225, config.height - 50, 160);
+    this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 210,
+                                      Math.random() * (159 - 150) + 150);
+    this.socialBar = new MinigameBar(this, config.width-225, config.height - 170,
+                                    Math.random() * (159 - 150) + 150);
+    this.foodBar = new MinigameBar(this, config.width-225, config.height - 130,
+                                    Math.random() * (159 - 150) + 150);
+    this.sleepBar = new MinigameBar(this, config.width-225, config.height - 90,
+                                    Math.random() * (159 - 150) + 150);
+    this.workBar = new MinigameBar(this, config.width-225, config.height - 50,
+                                    Math.random() * (159 - 150) + 150);
 
+    //tick marks on health bars; 1-5 are high end, 6-10 are low end
+    let graphics = this.add.graphics({ lineStyle: { width: 1, color: 0x000000 } });
+    let line = new Phaser.Geom.Line(config.width-65, config.height-210, config.width-65, config.height-195);
+    let line2 = new Phaser.Geom.Line(config.width-65, config.height-170, config.width-65, config.height-155);
+    let line3 = new Phaser.Geom.Line(config.width-65, config.height-130, config.width-65, config.height-115);
+    let line4 = new Phaser.Geom.Line(config.width-65, config.height-90, config.width-65, config.height-75);
+    let line5 = new Phaser.Geom.Line(config.width-65, config.height-50, config.width-65, config.height-35);
+    let line6 = new Phaser.Geom.Line(config.width-165, config.height-210, config.width-165, config.height-195);
+    let line7 = new Phaser.Geom.Line(config.width-165, config.height-170, config.width-165, config.height-155);
+    let line8 = new Phaser.Geom.Line(config.width-165, config.height-130, config.width-165, config.height-115);
+    let line9 = new Phaser.Geom.Line(config.width-165, config.height-90, config.width-165, config.height-75);
+    let line10 = new Phaser.Geom.Line(config.width-165, config.height-50, config.width-165, config.height-35);
+    graphics.strokeLineShape(line);
+    graphics.strokeLineShape(line2);
+    graphics.strokeLineShape(line3);
+    graphics.strokeLineShape(line4);
+    graphics.strokeLineShape(line5);
+    graphics.strokeLineShape(line6);
+    graphics.strokeLineShape(line7);
+    graphics.strokeLineShape(line8);
+    graphics.strokeLineShape(line9);
+    graphics.strokeLineShape(line10);
 
-    //random events
     this.randomEvent = new RandomEvent();
-    this.timedEvent = this.time.addEvent({ delay: 3500, callback: onTimer, callbackScope: this, loop: true });
+    this.timedEvent = this.time.addEvent({ delay: 5000, callback: onTimer, callbackScope: this, loop: true });
     this.eventText = this.add.text(50, 650, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
-
 };
 
 gameScene.update = function() {
-  this.exerciseBar.decrease(0.05);
-  this.socialBar.decrease(0.05);
-  this.foodBar.decrease(0.05);
-  this.sleepBar.decrease(0.05);
-  this.workBar.decrease(0.05);
+  this.exerciseBar.decrease(0.03);
+  this.socialBar.decrease(0.03);
+  this.foodBar.decrease(0.03);
+  this.sleepBar.decrease(0.03);
+  this.workBar.decrease(0.03);
   if (this.exerciseBar.value < 60 || this.socialBar.value < 60 || this.foodBar.value < 60     ||
       this.sleepBar.value < 60    || this.workBar.value < 60   || this.exerciseBar.value > 160 ||
       this.socialBar.value > 160   || this.foodBar.value > 160   || this.sleepBar.value > 160   ||
       this.workBar.value > 160) {
     this.healthBar.decrease(0.1);
   }
-  // if (socialGame.complete) {
-  //   this.healthBar.increase(0.5);
-  // }
-  // if (exerciseGame.complete) {
-  //   this.healthBar.increase(0.5);
-  // }
-  //sleep minigame
-  //this.sleepButton.setScale(scale);
-  //this.setInteractive(this.sleepButton);
-
-
 
   // food minigame
   //
@@ -239,12 +255,20 @@ gameScene.update = function() {
   //
   //
   if (tracker === 2) {
-    this.exerciseBar.increase(2);
+    this.exerciseBar.increase(3.5);
     tracker = 0;
   }
 
 
   //workmini game
+  // this.input.keyboard.on('keydown_'+numtoWord(this.workNums[numCount]), function (event){
+  //   if (numCount===0) {
+  //     gameScene.num1.setFill('#30e83c');
+  //     gameScene.num1.setFontSize('40px');
+  //   }
+  //   numCount++;
+  // });
+
 
   // food minigame
 
@@ -253,13 +277,13 @@ gameScene.update = function() {
   gameScene.playerText.setText(gameScene.textWord.substring(0, gameScene.combo.index));
   if (gameScene.newWord === true) {
     gameScene.playerText.setText("");
-    gameScene.socialBar.increase(7);
+    gameScene.socialBar.increase(12);
     gameScene.socialGame();
   }
 
-  //random events
-  
-
+  if (this.healthBar.value === 0) {
+    this.scene.start('GameOver');
+  }
 };
 
 function numtoWord(num){
@@ -325,7 +349,6 @@ gameScene.makeWork = function(){
   workListeners();
 }
 
-
 };
 
 function workListeners() {
@@ -338,6 +361,7 @@ function workListeners() {
       gameScene.input.keyboard.once('keydown_'+numtoWord(gameScene.workNums[2]), function(event) {
         gameScene.num2.setFill('#30e83c');
         gameScene.num2.setFontSize('40px');
+        gameScene.workBar.increase(12);
         gameScene.generateWorkNums();
         gameScene.makeWork();
       });
@@ -359,59 +383,57 @@ function workListeners() {
 // };
 
 gameScene.socialGame = function() {
-  gameScene.newWord = false;
-  let wordnum = 0;
-  let textWords = ["hey", "wassup","hello",
-                    "want to hang out","how are you",
-                    "can we talk","how about dinner",
-                    "howdy","thank you","see you soon",
-                    "coffee at eight", "i wanna party",
-                    "are you free","i appreciate it",
-                    "is everything all right","heyyo",
-                    "bruh","lmao","xoxo","i love you",
-                    "talk to you later","yeet","wow"];
-  if(this.firstPhrase == true) {
-    wordNum = Math.floor(Math.random() * textWords.length);
-    this.prevPhrase = wordNum;
-  } else {
-    while(wordNum === this.prevPhrase) {
-      wordNum = Math.floor(Math.random() * textWords.length);
-    }
-  }
-  this.firstPhrase = false;
-  this.prevPhrase = wordNum;
+ gameScene.newWord = false;
+ let wordnum = 0;
+ let textWords = ["hey", "wassup","hello",
+                   "want to hang out","how are you",
+                   "can we talk","how about dinner",
+                   "howdy","thank you","see you soon",
+                   "coffee at eight", "i wanna party",
+                   "are you free","i appreciate it",
+                   "is everything all right","heyyo",
+                   "bruh","lmao","xoxo","i love you",
+                   "talk to you later","yeet","wow"];
+ if(this.firstPhrase == true) {
+   wordNum = Math.floor(Math.random() * textWords.length);
+   this.prevPhrase = wordNum;
+ } else {
+   while(wordNum === this.prevPhrase) {
+     wordNum = Math.floor(Math.random() * textWords.length);
+   }
+ }
+ this.firstPhrase = false;
+ this.prevPhrase = wordNum;
 
-  console.log(textWords[wordNum]);
-  gameScene.textWord = textWords[wordNum];
-  let wordNumText = this.add.text(550, 440, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
-  wordNumText.depth = 10;
-  gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
-  gameScene.playerText = this.add.text(550, 500, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
+ console.log(textWords[wordNum]);
+ gameScene.textWord = textWords[wordNum];
+ let wordNumText = this.add.text(550, 440, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
+ wordNumText.depth = 10;
+ gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
+ gameScene.playerText = this.add.text(550, 500, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
 
-  this.input.keyboard.on('keycombomatch', function (event) {
+ this.input.keyboard.on('keycombomatch', function (event) {
 
-    console.log('Key Combo matched!');
-    gameScene.playerText.setText("");
-    wordNumText.setText("");
-    gameScene.newWord = true;
-  });
-
-
+   console.log('Key Combo matched!');
+   gameScene.playerText.setText("");
+   wordNumText.setText("");
+   gameScene.newWord = true;
+ });
 }
 
 function onTimer() {
-  gameScene.eventText.setText("");
-  gameScene.randomEvent.generate();
-  gameScene.eventText.setText(gameScene.randomEvent.text);
-  if(gameScene.randomEvent.stat === "Work") {
-    gameScene.workBar.decrease(gameScene.randomEvent.magnitude);
-  } else if (gameScene.randomEvent.stat === "Sleep") {
-    gameScene.sleepBar.decrease(gameScene.randomEvent.magnitude);
-  } else if (gameScene.randomEvent.stat === "Social") {
-    gameScene.socialBar.decrease(gameScene.randomEvent.magnitude);
-  } else if (gameScene.randomEvent.stat === "Food") {
-    gameScene.foodBar.decrease(gameScene.randomEvent.magnitude);
-  } else { //Exercise
-    gameScene.exerciseBar.decrease(gameScene.randomEvent.magnitude);
-  }
+ gameScene.eventText.setText("");
+ gameScene.randomEvent.generate();
+ gameScene.eventText.setText(gameScene.randomEvent.text);
+ if(gameScene.randomEvent.stat === "Work") {
+   gameScene.workBar.decrease(gameScene.randomEvent.magnitude);
+ } else if (gameScene.randomEvent.stat === "Sleep") {
+   gameScene.sleepBar.decrease(gameScene.randomEvent.magnitude);
+ } else if (gameScene.randomEvent.stat === "Social") {
+   gameScene.socialBar.decrease(gameScene.randomEvent.magnitude);
+ } else if (gameScene.randomEvent.stat === "Food") {
+   gameScene.foodBar.decrease(gameScene.randomEvent.magnitude);
+ } else { //Exercise
+   gameScene.exerciseBar.decrease(gameScene.randomEvent.magnitude);
+ }
 }

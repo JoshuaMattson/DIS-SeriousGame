@@ -27,14 +27,10 @@ class Food_Player extends Phaser.Physics.Arcade.Sprite {
         else {
           this.setVelocityX(300);
         }
-
-
     }
     else
     {
         this.setVelocityX(0);
-
-        //this.anims.play('turn');
     }
 
     if (this.cursors.up.isDown && this.body.touching.down)

@@ -52,20 +52,5 @@ homeScene.create = function() {
 };
 
 homeScene.update = function() {
-  // this.healthBar.decrease(0.1);
-  // this.exerciseBar.decrease(0.2);
-  // this.socialBar.decrease(0.12);
-  // this.foodBar.decrease(0.08);
-  // this.sleepBar.decrease(0.1);
-  // this.workBar.decrease(0.06);
-  // if (this.exerciseBar.value < 25 || this.socialBar.value < 25 || this.foodBar.value < 25 ||
-  //    this.sleepBar.value < 25 || this.workBar.value < 25) {
-  //   this.healthBar.decrease(0.1);
-  }
-  // if (socialGame.complete) {
-  //   this.healthBar.increase(0.5);
-  // }
-  // if (exerciseGame.complete) {
-  //   this.healthBar.increase(0.5);
-  // }
-// }
+
+}
