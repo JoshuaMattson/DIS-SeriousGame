@@ -30,6 +30,10 @@ let config = {
   backgroundColor: '#ffffff' // white background by default
 };
 
+let keyData = {
+  z: false,
+}
+
 // create the game, and pass it the configuration
 let game = new Phaser.Game(config);
 // let loadingBarBackground;
@@ -112,7 +116,6 @@ gameScene.create = function() {
     this.background.width = config.width;
     this.background.height = config.height;
 
-
     //this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //Work mini games
     this.generateWorkNums();
@@ -124,47 +127,93 @@ gameScene.create = function() {
     this.foodPlayer = new Food_Player(this, 100, 650);
 
 
+
+
     //sleep minigame
     imageSleepkey = this.add.image(50, 50, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
+
+
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+
+
     this.input.keyboard.on('keydown_Z', function (event) {
-        imageSleepkey.setScale(scale * 1.1);
+        //imageSleepkey.setScale(scale * 1.1);
+        if(keyData.z){
+          return;
+        }
+
+        if(imageSleepkey.onClickTweenUp){
+          imageSleepkey.onClickTweenUp.stop();
+        }
         gameScene.sleepBar.increase(0.7);
+
+        imageSleepkey.onClickTweenDown = gameScene.tweens.add({
+            targets: imageSleepkey,
+            scaleX: scale * 1.4,
+            scaleY: scale * 1.4,
+            duration: 200,
+            yoyo: false,
+            ease: 'Linear.easeIn',
+            onStart: function(){
+                imageSleepkey.setScale(scale * 1.1, scale * 1.1);
+            }
+        });
+        keyData.z = true;
     });
 
     this.input.keyboard.on('keyup_Z', function (event) {
-        imageSleepkey.setScale(scale);
+      imageSleepkey.onClickTweenDown.stop();
+
+      imageSleepkey.onClickTweenUp = gameScene.tweens.add({
+          targets: imageSleepkey,
+          scaleX: scale,
+          scaleY: scale,
+          duration: 200,
+          yoyo: false,
+          ease: 'Linear.easeIn'
+      });
+      keyData.z = false;
     });
+
+
 
     // exercise minigame
     exerciseBall1 = this.add.image(700, 100, 'exerciseBall1').setOrigin(0);
     exerciseBall1.setScale(ball_scale);
     exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
     exerciseBall2.setScale(ball_scale);
+
     this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
-        exerciseBall1.setScale(ball_scale * 1.1);
-        if (tracker === 0) {
-          tracker = 1;
-        }
-        else if (tracker === 1) {
-          tracker = 0;
-        }
+
     });
 
-    this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
-        exerciseBall1.setScale(ball_scale);
-    });
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+
+
 
     this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
-        exerciseBall2.setScale(ball_scale * 1.1);
-        if (tracker === 1) {
-          tracker = 2;
-        }
+
     });
 
     this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
-        exerciseBall2.setScale(ball_scale);
     });
+
+
+    this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
+
+    });
+
+
+    this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
+
+    });
+
+
 
     //social game
     let texting = this.add.image(730, 540, 'texting');
@@ -223,7 +272,7 @@ gameScene.create = function() {
     graphics.strokeLineShape(line10);
 
     this.randomEvent = new RandomEvent();
-    this.timedEvent = this.time.addEvent({ delay: 3500, callback: onTimer, callbackScope: this, loop: true });
+    this.timedEvent = this.time.addEvent({ delay: 15000, callback: onTimer, callbackScope: this, loop: true });
     this.eventText = this.add.text(50, 700, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
 
     //food drop time
