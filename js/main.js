@@ -19,7 +19,7 @@ let config = {
       default: 'arcade',
       arcade: {
           gravity: { y: 2000 },
-          debug: false
+          debug: true
       }
   },
   scene: [bootScene, loadingScene, homeScene, gameScene],
@@ -34,6 +34,7 @@ let game = new Phaser.Game(config);
 // let loadingBar;
 let loadingBarWidth = 150;
 let loadingBarHeight = 30;
+let tracker = 0;
 
 // a simple set of states that the game can assume.
 let GAMESTATE = {
@@ -53,7 +54,6 @@ gameScene.init = function() {
 gameScene.preload = function() {
   let gameWidth = this.sys.game.config.width;
   let gameHeight = this.sys.game.config.height;
-
   // loadingBarBackground = this.add.graphics();
   // loadingBarBackground.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
   // loadingBarBackground.fillStyle("#000000", 0.2);
@@ -74,23 +74,32 @@ gameScene.preload = function() {
   //     loadingBar.fillRect(0, 0, value * loadingBarWidth, loadingBarHeight);
   // }, this);
 
+  this.load.image("food_player","assets/images/food_player.png");
   this.load.image('apple', 'assets/images/food/Apple.png');
   this.load.image('bacon', 'assets/images/food/Bacon.png');
   this.load.image('chicken', 'assets/images/food/Chicken.png');
   this.load.image('cookie', 'assets/images/food/Cookie.png');
   this.load.image('potato', 'assets/images/food/Potato.png');
   this.load.image('steak', 'assets/images/food/Steak.png');
+
+  this.load.image('exercise', 'assets/images/dumbbell.png');
+  this.load.image('social', 'assets/images/social.png');
+  this.load.image('work', 'assets/images/work.png');
+  this.load.image('sleep', 'assets/images/sleep.png');
+
   this.load.image('character', 'assets/images/characterSprite.png');
   this.load.image('health', 'assets/images/healthBar.png');
   this.load.image('heart', 'assets/images/heart.png');
   this.load.image('brain', 'assets/images/brain.png');
   this.load.image('background', 'assets/images/background.png');
 
-  this.load.image("food_player","assets/images/food_player.png");
+  this.load.image("food_circle", "assets/images/food_circle.png");
 
   this.load.image("sleepButton", "assets/images/sleepButton.png");
   this.load.image("exerciseBall1", "assets/images/darkcircle.png");
   this.load.image("exerciseBall2","assets/images/lightcircle.png");
+
+  this.load.image("texting","assets/images/texting.png");
 };
 
 // ass all objects active from the start in the game in create
@@ -110,49 +119,110 @@ gameScene.create = function() {
     // food minigame
     //
     //
-    this.foodPlayer = new Food_Player(this, 100, 100);
+    this.foodPlayer = new Food_Player(this, 100, 700);
+
+
+
 
 
     //sleep minigame
     imageSleepkey = this.add.image(150, 100, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
+    this.input.keyboard.on('keydown_Z', function (event) {
+        imageSleepkey.setScale(scale * 1.1);
+        gameScene.sleepBar.increase(0.5);
+    });
+
+    this.input.keyboard.on('keyup_Z', function (event) {
+        imageSleepkey.setScale(scale);
+    });
 
     // exercise minigame
     exerciseBall1 = this.add.image(700, 100, 'exerciseBall1').setOrigin(0);
     exerciseBall1.setScale(ball_scale);
     exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
     exerciseBall2.setScale(ball_scale);
+    this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
+        exerciseBall1.setScale(ball_scale * 1.1);
+        if (tracker === 0) {
+          tracker = 1;
+        }
+        else if (tracker === 1) {
+          tracker = 0;
+        }
+    });
 
+    this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
+        exerciseBall1.setScale(ball_scale);
+    });
+
+    this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
+        exerciseBall2.setScale(ball_scale * 1.1);
+        if (tracker === 1) {
+          tracker = 2;
+        }
+    });
+
+    this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
+        exerciseBall2.setScale(ball_scale);
+    });
 
     //social game
+    let texting = this.add.image(730, 540, 'texting');
+    texting.setScale(1.3,1);
     this.firstPhrase = true;
     this.prevPhrase = 0;
     this.socialGame();
 
-    this.heart = this.add.sprite(config.width/2-260, config.height-55, 'heart');
-    this.heart.setScale(1.2);
+    this.heart = this.add.sprite(55, config.height-115, 'heart');
+    this.heart.setScale(2);
+    this.food = this.add.sprite(config.width-250, config.height-115, 'apple');
+    this.food.setScale(1.5);
+    this.exercise = this.add.sprite(config.width-250, config.height-190, 'exercise');
+    this.exercise.setScale(0.23);
+    this.social = this.add.sprite(config.width-250, config.height-155, 'social');
+    this.social.setScale(0.2);
+    this.sleep = this.add.sprite(config.width-250, config.height-70, 'sleep');
+    this.sleep.setScale(0.1);
+    this.work = this.add.sprite(config.width-250, config.height-30, 'work');
+    this.work.setScale(0.1);
 
-    this.healthBar = new HealthBar(this, config.width/2-250, config.height - 70, 507);
-    this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 100, 160);
-    this.socialBar = new MinigameBar(this, config.width-225, config.height - 80, 160);
-    this.foodBar = new MinigameBar(this, config.width-225, config.height - 60, 160);
-    this.sleepBar = new MinigameBar(this, config.width-225, config.height - 40, 160);
-    this.workBar = new MinigameBar(this, config.width-225, config.height - 20, 160);
+    this.healthBar = new HealthBar(this, 80, config.height - 150, 608);
+    this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 210, 160);
+    this.socialBar = new MinigameBar(this, config.width-225, config.height - 170, 160);
+    this.foodBar = new MinigameBar(this, config.width-225, config.height - 130, 160);
+    this.sleepBar = new MinigameBar(this, config.width-225, config.height - 90, 160);
+    this.workBar = new MinigameBar(this, config.width-225, config.height - 50, 160);
+
+
+    //random events
+    this.randomEvent = new RandomEvent();
+    this.timedEvent = this.time.addEvent({ delay: 3500, callback: onTimer, callbackScope: this, loop: true });
+    this.eventText = this.add.text(50, 650, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
 
 };
 
 gameScene.update = function() {
-  this.exerciseBar.decrease(0.02);
+  this.exerciseBar.decrease(0.05);
   this.socialBar.decrease(0.05);
-  this.foodBar.decrease(0.04);
-  this.sleepBar.decrease(0.03);
-  this.workBar.decrease(0.06);
+  this.foodBar.decrease(0.05);
+  this.sleepBar.decrease(0.05);
+  this.workBar.decrease(0.05);
   if (this.exerciseBar.value < 60 || this.socialBar.value < 60 || this.foodBar.value < 60     ||
       this.sleepBar.value < 60    || this.workBar.value < 60   || this.exerciseBar.value > 160 ||
       this.socialBar.value > 160   || this.foodBar.value > 160   || this.sleepBar.value > 160   ||
       this.workBar.value > 160) {
     this.healthBar.decrease(0.1);
   }
+  // if (socialGame.complete) {
+  //   this.healthBar.increase(0.5);
+  // }
+  // if (exerciseGame.complete) {
+  //   this.healthBar.increase(0.5);
+  // }
+  //sleep minigame
+  //this.sleepButton.setScale(scale);
+  //this.setInteractive(this.sleepButton);
 
 
 
@@ -164,32 +234,15 @@ gameScene.update = function() {
   // sleep minigame
   //
   //
-  this.input.keyboard.on('keydown_Z', function (event) {
-      imageSleepkey.setScale(scale * 1.1);
-  });
-
-  this.input.keyboard.on('keyup_Z', function (event) {
-      imageSleepkey.setScale(scale);
-  });
 
   // exercise minigame
   //
   //
-  this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
-      exerciseBall1.setScale(ball_scale * 1.1);
-  });
+  if (tracker === 2) {
+    this.exerciseBar.increase(2);
+    tracker = 0;
+  }
 
-  this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
-      exerciseBall1.setScale(ball_scale);
-  });
-
-  this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
-      exerciseBall2.setScale(ball_scale * 1.1);
-  });
-
-  this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
-      exerciseBall2.setScale(ball_scale);
-  });
 
   //workmini game
 
@@ -200,9 +253,12 @@ gameScene.update = function() {
   gameScene.playerText.setText(gameScene.textWord.substring(0, gameScene.combo.index));
   if (gameScene.newWord === true) {
     gameScene.playerText.setText("");
-    gameScene.socialBar.increase(5);
+    gameScene.socialBar.increase(7);
     gameScene.socialGame();
   }
+
+  //random events
+  
 
 };
 
@@ -311,7 +367,9 @@ gameScene.socialGame = function() {
                     "howdy","thank you","see you soon",
                     "coffee at eight", "i wanna party",
                     "are you free","i appreciate it",
-                    "is everything all right","heyyo"];
+                    "is everything all right","heyyo",
+                    "bruh","lmao","xoxo","i love you",
+                    "talk to you later","yeet","wow"];
   if(this.firstPhrase == true) {
     wordNum = Math.floor(Math.random() * textWords.length);
     this.prevPhrase = wordNum;
@@ -325,10 +383,10 @@ gameScene.socialGame = function() {
 
   console.log(textWords[wordNum]);
   gameScene.textWord = textWords[wordNum];
-  let wordNumText = this.add.text(500, 450, gameScene.textWord, {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+  let wordNumText = this.add.text(550, 440, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
   wordNumText.depth = 10;
   gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
-  gameScene.playerText = this.add.text(500, 500, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'});
+  gameScene.playerText = this.add.text(550, 500, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
 
   this.input.keyboard.on('keycombomatch', function (event) {
 
@@ -339,4 +397,21 @@ gameScene.socialGame = function() {
   });
 
 
+}
+
+function onTimer() {
+  gameScene.eventText.setText("");
+  gameScene.randomEvent.generate();
+  gameScene.eventText.setText(gameScene.randomEvent.text);
+  if(gameScene.randomEvent.stat === "Work") {
+    gameScene.workBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Sleep") {
+    gameScene.sleepBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Social") {
+    gameScene.socialBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Food") {
+    gameScene.foodBar.decrease(gameScene.randomEvent.magnitude);
+  } else { //Exercise
+    gameScene.exerciseBar.decrease(gameScene.randomEvent.magnitude);
+  }
 }

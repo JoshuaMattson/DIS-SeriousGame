@@ -40,11 +40,11 @@ class HealthBar {
 
         //  BG
         this.bar.fillStyle(0x000000);
-        this.bar.fillRect(this.x, this.y, 500, 30);
+        this.bar.fillRect(this.x, this.y, 600, 70);
 
         //  Health
         this.bar.fillStyle(0xffffff);
-        this.bar.fillRect(this.x+2, this.y+2, 496, 26);
+        this.bar.fillRect(this.x+2, this.y+2, 596, 66);
 
         if (this.value < 30) {
             this.bar.fillStyle(0xff0000);
@@ -55,7 +55,7 @@ class HealthBar {
 
         var d = Math.floor(this.p * this.value);
 
-        this.bar.fillRect(this.x + 2, this.y + 2, d, 26);
+        this.bar.fillRect(this.x + 2, this.y + 2, d, 66);
     }
 
 }
