@@ -9,8 +9,9 @@ let ball_scale = 0.25;
 var imageSleepkey;
 
 let numsExist = false;
-
 gameScene.velocity = 100;
+
+
 
 // our game's configuration
 let config = {
@@ -88,6 +89,7 @@ gameScene.preload = function() {
   this.load.image('social', 'assets/images/social.png');
   this.load.image('work', 'assets/images/work.png');
   this.load.image('sleep', 'assets/images/sleep.png');
+  this.load.image('workCalc', 'assets/images/calculator.jpg');
 
   this.load.image('character', 'assets/images/characterSprite.png');
   this.load.image('health', 'assets/images/healthBar.png');
@@ -98,8 +100,8 @@ gameScene.preload = function() {
   this.load.image("food_circle", "assets/images/food_circle.png");
 
   this.load.image("sleepButton", "assets/images/sleepButton.png");
-  this.load.image("exerciseBall1", "assets/images/darkcircle.png");
-  this.load.image("exerciseBall2","assets/images/lightcircle.png");
+  this.load.image("exerciseBall1", "assets/images/running1.jpg");
+  this.load.image("exerciseBall2","assets/images/running2.jpg");
   this.load.image("texting","assets/images/texting.png");
 };
 
@@ -115,17 +117,21 @@ gameScene.create = function() {
 
     //this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //Work mini games
+    this.calc = this.add.sprite(config.width/2, config.height/4-20, 'workCalc');
+    this.calc.setScale(0.7);
     this.generateWorkNums();
     this.makeWork();
 
     // food minigame
-    //
-    //
     this.foodPlayer = new Food_Player(this, 100, 650);
+    //food drop time
+    foodTimer.call(this);
+    this.foodTimedEvent = this.time.addEvent({ delay: 4000, callback: foodTimer, callbackScope: this, loop: true });
 
+    this.velocityTimer = this.time.addEvent({ delay: 1000, callback: function(){gameScene.velocity++;}, callbackScope: this, loop: true });
 
     //sleep minigame
-    imageSleepkey = this.add.image(50, 50, 'sleepButton').setOrigin(0);
+    imageSleepkey = this.add.image(110, 120, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
     this.input.keyboard.on('keydown_Z', function (event) {
         imageSleepkey.setScale(scale * 1.1);
@@ -137,12 +143,12 @@ gameScene.create = function() {
     });
 
     // exercise minigame
-    exerciseBall1 = this.add.image(700, 100, 'exerciseBall1').setOrigin(0);
-    exerciseBall1.setScale(ball_scale);
-    exerciseBall2 = this.add.image(800, 100, 'exerciseBall2').setOrigin(0);
-    exerciseBall2.setScale(ball_scale);
+    exerciseBall1 = this.add.image(700, 120, 'exerciseBall1').setOrigin(0);
+    exerciseBall1.setScale(1);
+    exerciseBall2 = this.add.image(800, 120, 'exerciseBall2').setOrigin(0);
+    exerciseBall2.setScale(1);
     this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
-        exerciseBall1.setScale(ball_scale * 1.1);
+        exerciseBall1.setScale(1.1);
         if (tracker === 0) {
           tracker = 1;
         }
@@ -152,22 +158,22 @@ gameScene.create = function() {
     });
 
     this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
-        exerciseBall1.setScale(ball_scale);
+        exerciseBall1.setScale(1);
     });
 
     this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
-        exerciseBall2.setScale(ball_scale * 1.1);
+        exerciseBall2.setScale(1.1);
         if (tracker === 1) {
           tracker = 2;
         }
     });
 
     this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
-        exerciseBall2.setScale(ball_scale);
+        exerciseBall2.setScale(1);
     });
 
     //social game
-    let texting = this.add.image(730, 540, 'texting');
+    let texting = this.add.image(730, 640, 'texting'); //550, 450
     texting.setScale(1.3,1);
     this.firstPhrase = true;
     this.prevPhrase = 0;
@@ -189,15 +195,15 @@ gameScene.create = function() {
     this.work.setScale(0.1);
     this.healthBar = new HealthBar(this, 80, config.height - 150, 608);
     this.exerciseBar = new MinigameBar(this, config.width-225, config.height - 210,
-                                      Math.random() * (159 - 150) + 150);
+                                      Math.random() * (150 - 130) + 130);
     this.socialBar = new MinigameBar(this, config.width-225, config.height - 170,
-                                    Math.random() * (159 - 150) + 150);
+                                    Math.random() * (150 - 130) + 130);
     this.foodBar = new MinigameBar(this, config.width-225, config.height - 130,
-                                    Math.random() * (159 - 150) + 150);
+                                    Math.random() * (150 - 130) + 130);
     this.sleepBar = new MinigameBar(this, config.width-225, config.height - 90,
-                                    Math.random() * (159 - 150) + 150);
+                                    Math.random() * (150 - 130) + 130);
     this.workBar = new MinigameBar(this, config.width-225, config.height - 50,
-                                    Math.random() * (159 - 150) + 150);
+                                    Math.random() * (150 - 130) + 130);
 
     //tick marks on health bars; 1-5 are high end, 6-10 are low end
     let graphics = this.add.graphics({ lineStyle: { width: 1, color: 0x000000 } });
@@ -223,26 +229,16 @@ gameScene.create = function() {
     graphics.strokeLineShape(line10);
 
     this.randomEvent = new RandomEvent();
-    this.timedEvent = this.time.addEvent({ delay: 3500, callback: onTimer, callbackScope: this, loop: true });
-    this.eventText = this.add.text(50, 700, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
-
-    //food drop time
-    foodTimer.call(this);
-    this.foodTimedEvent = this.time.addEvent({ delay: 4000, callback: foodTimer, callbackScope: this, loop: true });
-
-    this.velocityTimer = this.time.addEvent({ delay: 1000, callback: function(){gameScene.velocity++;}, callbackScope: this, loop: true });
-
-
-
-
+    this.timedEvent = this.time.addEvent({ delay: 5000, callback: onTimer, callbackScope: this, loop: true });
+    this.eventText = this.add.text(50, 715, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
 };
 
 gameScene.update = function() {
-  this.exerciseBar.decrease(0.03);
-  this.socialBar.decrease(0.03);
-  this.foodBar.decrease(0.03);
-  this.sleepBar.decrease(0.03);
-  this.workBar.decrease(0.03);
+  this.exerciseBar.decrease(0.04);
+  this.socialBar.decrease(0.04);
+  this.foodBar.decrease(0.04);
+  this.sleepBar.decrease(0.04);
+  this.workBar.decrease(0.04);
   if (this.exerciseBar.value < 60 || this.socialBar.value < 60 || this.foodBar.value < 60     ||
       this.sleepBar.value < 60    || this.workBar.value < 60   || this.exerciseBar.value > 160 ||
       this.socialBar.value > 160   || this.foodBar.value > 160   || this.sleepBar.value > 160   ||
@@ -251,8 +247,6 @@ gameScene.update = function() {
   }
 
   // food minigame
-  //
-  //
   this.foodPlayer.update();
 
   // sleep minigame
@@ -269,23 +263,12 @@ gameScene.update = function() {
 
 
   //workmini game
-  // this.input.keyboard.on('keydown_'+numtoWord(this.workNums[numCount]), function (event){
-  //   if (numCount===0) {
-  //     gameScene.num1.setFill('#30e83c');
-  //     gameScene.num1.setFontSize('40px');
-  //   }
-  //   numCount++;
-  // });
-
-
-  // food minigame
-
 
   //social game
   gameScene.playerText.setText(gameScene.textWord.substring(0, gameScene.combo.index));
   if (gameScene.newWord === true) {
     gameScene.playerText.setText("");
-    gameScene.socialBar.increase(12);
+    gameScene.socialBar.increase(15);
     gameScene.socialGame();
   }
 
@@ -336,9 +319,9 @@ gameScene.generateWorkNums = function(){
 
 gameScene.makeWork = function(){
   if (!numsExist){
-  this.num0 = this.add.text(450, 100, this.workNums[0], { fontSize: '50px', fill: '#000000' });
-  this.num1 = this.add.text(480, 100, this.workNums[1], { fontSize: '50px', fill: '#000000' });
-  this.num2 = this.add.text(510, 100, this.workNums[2], { fontSize: '50px', fill: '#000000' });
+  this.num0 = this.add.text(450, 140, this.workNums[0], { fontSize: '50px', fill: '#000000' });
+  this.num1 = this.add.text(480, 140, this.workNums[1], { fontSize: '50px', fill: '#000000' });
+  this.num2 = this.add.text(510, 140, this.workNums[2], { fontSize: '50px', fill: '#000000' });
   workListeners();
   numsExist=true;
 } else {
@@ -369,7 +352,7 @@ function workListeners() {
       gameScene.input.keyboard.once('keydown_'+numtoWord(gameScene.workNums[2]), function(event) {
         gameScene.num2.setFill('#30e83c');
         gameScene.num2.setFontSize('40px');
-        gameScene.workBar.increase(12);
+        gameScene.workBar.increase(15);
         gameScene.generateWorkNums();
         gameScene.makeWork();
       });
@@ -415,7 +398,7 @@ gameScene.socialGame = function() {
 
  console.log(textWords[wordNum]);
  gameScene.textWord = textWords[wordNum];
- let wordNumText = this.add.text(550, 440, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
+ let wordNumText = this.add.text(550, 540, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
  wordNumText.depth = 10;
  gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
  gameScene.playerText = this.add.text(550, 500, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
@@ -453,6 +436,6 @@ function foodTimer() {
 }
 
 function collectNutrition(player,food){
-   this.foodBar.increase(15);
+   this.foodBar.increase(17);
    food.destroy();
 }

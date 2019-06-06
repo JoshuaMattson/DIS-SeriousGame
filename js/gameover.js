@@ -19,7 +19,7 @@ gameoverScene.create = function() {
   message.setOrigin(0.5, 0.5);
   message.depth = 10;
 
-  let message2 = this.add.text(gameWidth/2, gameHeight/3, 'Please refresh page', {
+  let message2 = this.add.text(gameWidth/2, gameHeight/3, 'Please refresh page to restart', {
       font: '40px Courier New',
       color: '0x000000'
   });
