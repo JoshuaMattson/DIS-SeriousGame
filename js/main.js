@@ -57,6 +57,7 @@ gameScene.init = function() {
     // log we are now in "Game Scene"
     console.log("Started Scene: Game");
     this.state = GAMESTATE.READY;
+    this.realTime = 0;
 };
 
 gameScene.preload = function() {
@@ -265,11 +266,17 @@ gameScene.create = function() {
     graphics.strokeLineShape(line10);
 
     this.randomEvent = new RandomEvent();
+    this.firstEvent = true;
     this.timedEvent = this.time.addEvent({ delay: 5000, callback: onTimer, callbackScope: this, loop: true });
     this.eventText = this.add.text(50, 715, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
+
+    this.timeText = this.add.text(50, 750, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'}) 
 };
 
-gameScene.update = function() {
+gameScene.update = function(time, delta) {
+  this.realTime += delta; 
+  this.timeText.setText('Time Elapsed: ' + Math.floor((this.realTime/1000)).toString() + "s."); 
+
   this.exerciseBar.decrease(0.04);
   this.socialBar.decrease(0.04);
   this.foodBar.decrease(0.04);
@@ -418,7 +425,7 @@ gameScene.socialGame = function() {
                    "howdy","thank you","see you soon",
                    "coffee at eight", "i wanna party",
                    "are you free","i appreciate it",
-                   "is everything all right","heyyo",
+                   "is everything okay","heyyo",
                    "bruh","lmao","xoxo","i love you",
                    "talk to you later","yeet","wow"];
  if(this.firstPhrase == true) {
@@ -450,19 +457,25 @@ gameScene.socialGame = function() {
 
 function onTimer() {
  gameScene.eventText.setText("");
- gameScene.randomEvent.generate();
- gameScene.eventText.setText(gameScene.randomEvent.text);
- if(gameScene.randomEvent.stat === "Work") {
-   gameScene.workBar.decrease(gameScene.randomEvent.magnitude);
- } else if (gameScene.randomEvent.stat === "Sleep") {
-   gameScene.sleepBar.decrease(gameScene.randomEvent.magnitude);
- } else if (gameScene.randomEvent.stat === "Social") {
-   gameScene.socialBar.decrease(gameScene.randomEvent.magnitude);
- } else if (gameScene.randomEvent.stat === "Food") {
-   gameScene.foodBar.decrease(gameScene.randomEvent.magnitude);
- } else { //Exercise
-   gameScene.exerciseBar.decrease(gameScene.randomEvent.magnitude);
+ if(gameScene.firstEvent === true) {
+  gameScene.eventText.setText("Too easy? Let's try balancing your mental health.");
+  gameScene.firstEvent = false;
+ } else {
+  gameScene.eventText.setText(gameScene.randomEvent.text);
+  if(gameScene.randomEvent.stat === "Work") {
+    gameScene.workBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Sleep") {
+    gameScene.sleepBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Social") {
+    gameScene.socialBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Food") {
+    gameScene.foodBar.decrease(gameScene.randomEvent.magnitude);
+  } else { //Exercise
+     gameScene.exerciseBar.decrease(gameScene.randomEvent.magnitude);
+  }
  }
+ gameScene.randomEvent.generate();
+ 
 }
 
 function foodTimer() {
