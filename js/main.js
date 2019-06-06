@@ -31,10 +31,6 @@ let config = {
   backgroundColor: '#ffffff' // white background by default
 };
 
-let keyData = {
-  z: false,
-}
-
 // create the game, and pass it the configuration
 let game = new Phaser.Game(config);
 // let loadingBarBackground;
@@ -42,6 +38,11 @@ let game = new Phaser.Game(config);
 let loadingBarWidth = 150;
 let loadingBarHeight = 30;
 let tracker = 0;
+gameScene.velocity = 100;
+let keyData = {
+  z: false,
+}
+
 
 // a simple set of states that the game can assume.
 let GAMESTATE = {
@@ -118,6 +119,7 @@ gameScene.create = function() {
     this.background.width = config.width;
     this.background.height = config.height;
 
+
     //this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //Work mini games
     this.calc = this.add.sprite(config.width/2, config.height/4-20, 'workCalc');
@@ -133,20 +135,11 @@ gameScene.create = function() {
 
     this.velocityTimer = this.time.addEvent({ delay: 1000, callback: function(){gameScene.velocity++;}, callbackScope: this, loop: true });
 
-
-
     //sleep minigame
     imageSleepkey = this.add.image(110, 120, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
-
-
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-
-
     this.input.keyboard.on('keydown_Z', function (event) {
-        //imageSleepkey.setScale(scale * 1.1);
+        gameScene.sleepBar.increase(0.7);
         if(keyData.z){
           return;
         }
@@ -154,7 +147,7 @@ gameScene.create = function() {
         if(imageSleepkey.onClickTweenUp){
           imageSleepkey.onClickTweenUp.stop();
         }
-        gameScene.sleepBar.increase(0.7);
+
 
         imageSleepkey.onClickTweenDown = gameScene.tweens.add({
             targets: imageSleepkey,
@@ -185,7 +178,6 @@ gameScene.create = function() {
     });
 
 
-
     // exercise minigame
     exerciseBall1 = this.add.image(700, 120, 'exerciseBall1').setOrigin(0);
     exerciseBall1.setScale(1);
@@ -205,12 +197,6 @@ gameScene.create = function() {
         exerciseBall1.setScale(1);
     });
 
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-
-
-
     this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
         exerciseBall2.setScale(1.1);
         if (tracker === 1) {
@@ -221,18 +207,6 @@ gameScene.create = function() {
     this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
         exerciseBall2.setScale(1);
     });
-
-
-    this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
-
-    });
-
-
-    this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
-
-    });
-
-
 
     //social game
     let texting = this.add.image(730, 640, 'texting'); //550, 450
@@ -291,18 +265,8 @@ gameScene.create = function() {
     graphics.strokeLineShape(line10);
 
     this.randomEvent = new RandomEvent();
-    this.timedEvent = this.time.addEvent({ delay: 15000, callback: onTimer, callbackScope: this, loop: true });
-    this.eventText = this.add.text(50, 700, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
-
-    //food drop time
-    foodTimer.call(this);
-    this.foodTimedEvent = this.time.addEvent({ delay: 4000, callback: foodTimer, callbackScope: this, loop: true });
-
-    this.velocityTimer = this.time.addEvent({ delay: 1000, callback: function(){gameScene.velocity++;}, callbackScope: this, loop: true });
-
-
-
-
+    this.timedEvent = this.time.addEvent({ delay: 5000, callback: onTimer, callbackScope: this, loop: true });
+    this.eventText = this.add.text(50, 715, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
 };
 
 gameScene.update = function() {
@@ -473,7 +437,7 @@ gameScene.socialGame = function() {
  let wordNumText = this.add.text(550, 540, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
  wordNumText.depth = 10;
  gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
- gameScene.playerText = this.add.text(550, 500, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
+ gameScene.playerText = this.add.text(550, 610, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
 
  this.input.keyboard.on('keycombomatch', function (event) {
 
