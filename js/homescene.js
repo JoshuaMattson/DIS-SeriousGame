@@ -21,8 +21,15 @@ homeScene.create = function() {
     background.height = config.height;
 
     // create the text for the start button
+    this.add.image(gameWidth/2 - 10, 350, 'head');
+    let titleText = this.add.text(gameWidth/2, 450, 'SELF-CARE SIMULATOR', {
+        font: '60px Courier New',
+        fill: '#000000'
+    });
+    titleText.setOrigin(0.5, 0.5);
+    titleText.depth = 10;
     let startText = this.add.text(gameWidth/2, gameHeight - 150, 'START', {
-        font: '40px Arial',
+        font: '40px Courier New',
         fill: '#000000'
     });
     startText.setOrigin(0.5, 0.5);

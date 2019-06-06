@@ -197,7 +197,7 @@ gameScene.create = function() {
 
     //random events
     this.randomEvent = new RandomEvent();
-    this.timedEvent = this.time.addEvent({ delay: 3500, callback: onTimer, callbackScope: this, loop: true });
+    this.timedEvent = this.time.addEvent({ delay: 5000, callback: onTimer, callbackScope: this, loop: true });
     this.eventText = this.add.text(50, 650, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
 
 };
