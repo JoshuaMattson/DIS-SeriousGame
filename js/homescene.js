@@ -21,8 +21,15 @@ homeScene.create = function() {
     background.height = config.height;
 
     // create the text for the start button
+    this.add.image(gameWidth/2 - 10, 350, 'head');
+    let titleText = this.add.text(gameWidth/2, 450, 'SELF-CARE SIMULATOR', {
+        font: '60px Courier New',
+        fill: '#000000'
+    });
+    titleText.setOrigin(0.5, 0.5);
+    titleText.depth = 10;
     let startText = this.add.text(gameWidth/2, gameHeight - 150, 'START', {
-        font: '40px Arial',
+        font: '40px Courier New',
         fill: '#000000'
     });
     startText.setOrigin(0.5, 0.5);
@@ -52,20 +59,5 @@ homeScene.create = function() {
 };
 
 homeScene.update = function() {
-  // this.healthBar.decrease(0.1);
-  // this.exerciseBar.decrease(0.2);
-  // this.socialBar.decrease(0.12);
-  // this.foodBar.decrease(0.08);
-  // this.sleepBar.decrease(0.1);
-  // this.workBar.decrease(0.06);
-  // if (this.exerciseBar.value < 25 || this.socialBar.value < 25 || this.foodBar.value < 25 ||
-  //    this.sleepBar.value < 25 || this.workBar.value < 25) {
-  //   this.healthBar.decrease(0.1);
-  }
-  // if (socialGame.complete) {
-  //   this.healthBar.increase(0.5);
-  // }
-  // if (exerciseGame.complete) {
-  //   this.healthBar.increase(0.5);
-  // }
-// }
+
+}
