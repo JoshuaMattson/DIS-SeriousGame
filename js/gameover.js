@@ -13,14 +13,14 @@ gameoverScene.create = function() {
   background.height = config.height;
 
   let message = this.add.text(gameWidth/2, gameHeight/2, '(Insert inspirational quote here)', {
-      font: '40px Arial',
+      font: '40px Courier New',
       color: '0x000000'
   });
   message.setOrigin(0.5, 0.5);
   message.depth = 10;
 
   let message2 = this.add.text(gameWidth/2, gameHeight/3, 'Please refresh page', {
-      font: '40px Arial',
+      font: '40px Courier New',
       color: '0x000000'
   });
   message2.setOrigin(0.5, 0.5);
