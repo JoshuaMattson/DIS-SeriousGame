@@ -5,7 +5,6 @@ let gameScene = new Phaser.Scene('Game');
 
 
 let scale = 0.5;
-let ball_scale = 0.25;
 var imageSleepkey;
 
 let numsExist = false;
@@ -39,8 +38,11 @@ let loadingBarWidth = 150;
 let loadingBarHeight = 30;
 let tracker = 0;
 gameScene.velocity = 100;
+
 let keyData = {
   z: false,
+  l: false,
+  r: false
 }
 
 
@@ -137,7 +139,7 @@ gameScene.create = function() {
     this.velocityTimer = this.time.addEvent({ delay: 1000, callback: function(){gameScene.velocity++;}, callbackScope: this, loop: true });
 
     //sleep minigame
-    imageSleepkey = this.add.image(110, 70, 'sleepButton').setOrigin(0);
+    imageSleepkey = this.add.image(80, 80, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
     this.input.keyboard.on('keydown_Z', function (event) {
         gameScene.sleepBar.increase(1);
@@ -180,34 +182,103 @@ gameScene.create = function() {
 
 
     // exercise minigame
-    exerciseBall1 = this.add.image(700, 70, 'exerciseBall1').setOrigin(0);
+    exerciseBall1 = this.add.image(680, 120, 'exerciseBall1').setOrigin(0);
     exerciseBall1.setScale(1);
-    exerciseBall2 = this.add.image(800, 70, 'exerciseBall2').setOrigin(0);
+    exerciseBall2 = this.add.image(810, 120, 'exerciseBall2').setOrigin(0);
     exerciseBall2.setScale(1);
     this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
-        exerciseBall1.setScale(1.1);
+
+
         if (tracker === 0) {
           tracker = 1;
         }
         else if (tracker === 1) {
           tracker = 0;
         }
+
+        if(keyData.l){
+          return;
+        }
+        if(exerciseBall1.onClickTweenUpBallOne){
+          exerciseBall1.onClickTweenUpBallOne.stop();
+        }
+
+
+        exerciseBall1.onClickTweenDownBallOne = gameScene.tweens.add({
+            targets: exerciseBall1,
+            scaleX: 1.4,
+            scaleY: 1.4,
+            duration: 200,
+            yoyo: false,
+            ease: 'Linear.easeIn',
+            onStart: function(){
+                exerciseBall1.setScale(1.1,1.1);
+            }
+        });
+        keyData.l = true;
     });
 
     this.input.keyboard.on('keyup_OPEN_BRACKET', function (event) {
-        exerciseBall1.setScale(1);
+      exerciseBall1.onClickTweenDownBallOne.stop();
+
+      exerciseBall1.onClickTweenUpBallOne = gameScene.tweens.add({
+          targets: exerciseBall1,
+          scaleX: 1,
+          scaleY: 1,
+          duration: 200,
+          yoyo: false,
+          ease: 'Linear.easeIn'
+      });
+      keyData.l = false;
     });
+
+
+
+
 
     this.input.keyboard.on('keydown_CLOSED_BRACKET', function (event) {
         exerciseBall2.setScale(1.1);
         if (tracker === 1) {
           tracker = 2;
         }
+        if(keyData.r){
+          return;
+        }
+
+        if(exerciseBall2.onClickTweenUpBallTwo){
+          exerciseBall2.onClickTweenUpBallTwo.stop();
+        }
+
+
+        exerciseBall2.onClickTweenDownBallTwo = gameScene.tweens.add({
+            targets: exerciseBall2,
+            scaleX: 1.4,
+            scaleY: 1.4,
+            duration: 200,
+            yoyo: false,
+            ease: 'Linear.easeIn',
+            onStart: function(){
+                exerciseBall2.setScale(1.1,1.1);
+            }
+        });
+        keyData.r = true;
+
     });
 
-    this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
-        exerciseBall2.setScale(1);
+      this.input.keyboard.on('keyup_CLOSED_BRACKET', function (event) {
+        exerciseBall2.onClickTweenDownBallTwo.stop();
+
+        exerciseBall2.onClickTweenUpBallTwo = gameScene.tweens.add({
+            targets: exerciseBall2,
+            scaleX: 1,
+            scaleY: 1,
+            duration: 200,
+            yoyo: false,
+            ease: 'Linear.easeIn'
+        });
+        keyData.r = false;
     });
+
 
     //social game
     let texting = this.add.image(730, 540, 'texting'); //550, 450
@@ -270,12 +341,12 @@ gameScene.create = function() {
     this.timedEvent = this.time.addEvent({ delay: 10000, callback: onTimer, callbackScope: this, loop: true });
     this.eventText = this.add.text(50, 715, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
 
-    this.timeText = this.add.text(50, 750, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'}) 
+    this.timeText = this.add.text(50, 750, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'})
 };
 
 gameScene.update = function(time, delta) {
-  this.realTime += delta; 
-  this.timeText.setText('Time Elapsed: ' + Math.floor((this.realTime/1000)).toString() + "s."); 
+  this.realTime += delta;
+  this.timeText.setText('Time Elapsed: ' + Math.floor((this.realTime/1000)).toString() + "s.");
 
   this.exerciseBar.decrease(0.01 * (time/50000));
   this.socialBar.decrease(0.01 * (time/50000));
@@ -476,7 +547,7 @@ function onTimer() {
   }
  }
  gameScene.randomEvent.generate();
- 
+
 }
 
 function foodTimer() {
