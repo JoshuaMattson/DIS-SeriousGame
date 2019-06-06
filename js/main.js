@@ -122,7 +122,7 @@ gameScene.create = function() {
 
     //this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //Work mini games
-    this.calc = this.add.sprite(config.width/2, config.height/4-20, 'workCalc');
+    this.calc = this.add.sprite(config.width/2, config.height/4-80, 'workCalc');
     this.calc.setScale(0.7);
     this.generateWorkNums();
     this.makeWork();
@@ -136,7 +136,7 @@ gameScene.create = function() {
     this.velocityTimer = this.time.addEvent({ delay: 1000, callback: function(){gameScene.velocity++;}, callbackScope: this, loop: true });
 
     //sleep minigame
-    imageSleepkey = this.add.image(110, 120, 'sleepButton').setOrigin(0);
+    imageSleepkey = this.add.image(110, 70, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
     this.input.keyboard.on('keydown_Z', function (event) {
         gameScene.sleepBar.increase(0.7);
@@ -179,9 +179,9 @@ gameScene.create = function() {
 
 
     // exercise minigame
-    exerciseBall1 = this.add.image(700, 120, 'exerciseBall1').setOrigin(0);
+    exerciseBall1 = this.add.image(700, 70, 'exerciseBall1').setOrigin(0);
     exerciseBall1.setScale(1);
-    exerciseBall2 = this.add.image(800, 120, 'exerciseBall2').setOrigin(0);
+    exerciseBall2 = this.add.image(800, 70, 'exerciseBall2').setOrigin(0);
     exerciseBall2.setScale(1);
     this.input.keyboard.on('keydown_OPEN_BRACKET', function (event) {
         exerciseBall1.setScale(1.1);
@@ -209,7 +209,7 @@ gameScene.create = function() {
     });
 
     //social game
-    let texting = this.add.image(730, 640, 'texting'); //550, 450
+    let texting = this.add.image(730, 540, 'texting'); //550, 450
     texting.setScale(1.3,1);
     this.firstPhrase = true;
     this.prevPhrase = 0;
@@ -355,9 +355,9 @@ gameScene.generateWorkNums = function(){
 
 gameScene.makeWork = function(){
   if (!numsExist){
-  this.num0 = this.add.text(450, 140, this.workNums[0], { fontSize: '50px', fill: '#000000' });
-  this.num1 = this.add.text(480, 140, this.workNums[1], { fontSize: '50px', fill: '#000000' });
-  this.num2 = this.add.text(510, 140, this.workNums[2], { fontSize: '50px', fill: '#000000' });
+  this.num0 = this.add.text(450, 77, this.workNums[0], { fontSize: '50px', fill: '#000000' });
+  this.num1 = this.add.text(480, 77, this.workNums[1], { fontSize: '50px', fill: '#000000' });
+  this.num2 = this.add.text(510, 77, this.workNums[2], { fontSize: '50px', fill: '#000000' });
   workListeners();
   numsExist=true;
 } else {
@@ -434,10 +434,10 @@ gameScene.socialGame = function() {
 
  console.log(textWords[wordNum]);
  gameScene.textWord = textWords[wordNum];
- let wordNumText = this.add.text(550, 540, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
+ let wordNumText = this.add.text(550, 440, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
  wordNumText.depth = 10;
  gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
- gameScene.playerText = this.add.text(550, 610, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
+ gameScene.playerText = this.add.text(550, 510, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
 
  this.input.keyboard.on('keycombomatch', function (event) {
 
