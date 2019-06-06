@@ -140,7 +140,7 @@ gameScene.create = function() {
     imageSleepkey = this.add.image(110, 70, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
     this.input.keyboard.on('keydown_Z', function (event) {
-        gameScene.sleepBar.increase(0.7);
+        gameScene.sleepBar.increase(1);
         if(keyData.z){
           return;
         }
@@ -267,7 +267,7 @@ gameScene.create = function() {
 
     this.randomEvent = new RandomEvent();
     this.firstEvent = true;
-    this.timedEvent = this.time.addEvent({ delay: 5000, callback: onTimer, callbackScope: this, loop: true });
+    this.timedEvent = this.time.addEvent({ delay: 10000, callback: onTimer, callbackScope: this, loop: true });
     this.eventText = this.add.text(50, 715, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
 
     this.timeText = this.add.text(50, 750, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'}) 
@@ -277,11 +277,11 @@ gameScene.update = function(time, delta) {
   this.realTime += delta; 
   this.timeText.setText('Time Elapsed: ' + Math.floor((this.realTime/1000)).toString() + "s."); 
 
-  this.exerciseBar.decrease(0.04);
-  this.socialBar.decrease(0.04);
-  this.foodBar.decrease(0.04);
-  this.sleepBar.decrease(0.04);
-  this.workBar.decrease(0.04);
+  this.exerciseBar.decrease(0.01 * (time/50000));
+  this.socialBar.decrease(0.01 * (time/50000));
+  this.foodBar.decrease(0.01 * (time/50000));
+  this.sleepBar.decrease(0.01 * (time/50000));
+  this.workBar.decrease(0.01 * (time/50000));
   if (this.exerciseBar.value < 60 || this.socialBar.value < 60 || this.foodBar.value < 60     ||
       this.sleepBar.value < 60    || this.workBar.value < 60   || this.exerciseBar.value > 160 ||
       this.socialBar.value > 160   || this.foodBar.value > 160   || this.sleepBar.value > 160   ||
@@ -316,6 +316,7 @@ gameScene.update = function(time, delta) {
   }
 
   if (this.healthBar.value === 0) {
+    this.finalTime = this.realTime;
     this.scene.start('GameOver');
   }
 };

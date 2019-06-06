@@ -15,9 +15,9 @@ class RandomEvent {
             this.stat = "Work";
             this.magnitude = 10;
         } else if (seedNum === 1) {
-            this.text = "It was a long, restless night tossing and turning. (-15 Sleep)";
+            this.text = "It was a long, restless night tossing and turning. (-10 Sleep)";
             this.stat = "Sleep";
-            this.magnitude = 15;
+            this.magnitude = 10;
         } else if (seedNum === 2) {
             this.text = "The thought of facing the world today is just too much. (-10 Social)";
             this.stat = "Social";
@@ -35,9 +35,9 @@ class RandomEvent {
             this.stat = "Social";
             this.magnitude = 5;
         } else if (seedNum === 5) {
-            this.text = "Up all night with racing thoughts. (-25 Sleep)";
+            this.text = "Up all night with racing thoughts. (-20 Sleep)";
             this.stat = "Sleep";
-            this.magnitude = 25;
+            this.magnitude = 20;
         } else if (seedNum === 6) {
             this.text = "You've been taking a few too mant days off lately. (-15 Work)";
             this.stat = "Work";

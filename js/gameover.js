@@ -12,14 +12,14 @@ gameoverScene.create = function() {
   background.width = config.width;
   background.height = config.height;
 
-  let message = this.add.text(gameWidth/2, gameHeight/2, '(Insert inspirational quote here)', {
+  let message = this.add.text(gameWidth/2, gameHeight/3, 'GAME OVER - You lasted ' + Math.floor(gameScene.realTime/1000) + " seconds.", {
       font: '40px Courier New',
       color: '0x000000'
   });
   message.setOrigin(0.5, 0.5);
   message.depth = 10;
 
-  let message2 = this.add.text(gameWidth/2, gameHeight/3, 'Please refresh page to restart', {
+  let message2 = this.add.text(gameWidth/2, gameHeight/2, '(Please refresh page to restart)', {
       font: '40px Courier New',
       color: '0x000000'
   });
