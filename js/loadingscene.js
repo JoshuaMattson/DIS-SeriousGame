@@ -28,6 +28,27 @@ loadingScene.preload = function() {
     loadingBarBackground.fillStyle("#ffffff", 0.2);
     loadingBarBackground.fillRect(0, 0, loadingBarWidth, loadingBarHeight);
 
+    let loadText = this.add.text(gameWidth/2, 230, 'Loading...', { 
+        font: '35px Courier New', 
+        fill: '#000000' 
+    }); 
+    loadText.setOrigin(0.5, 0.5); 
+    loadText.depth = 10; 
+ 
+    let quoteText1 = this.add.text(gameWidth/2, 750, '\"Be kind, for everyone you meet is fighting', { 
+        font: '30px Courier New', 
+        fill: '#000000' 
+    }); 
+    quoteText1.setOrigin(0.5, 0.5); 
+    quoteText1.depth = 10; 
+ 
+    let quoteText2 = this.add.text(gameWidth/2, 800, 'a battle you know nothing about.\"', { 
+        font: '30px Courier New', 
+        fill: '#000000' 
+    }); 
+    quoteText2.setOrigin(0.5, 0.5); 
+    quoteText2.depth = 10; 
+
     let loadingBar = this.add.graphics();
     loadingBar.setPosition(gameWidth/2 - loadingBarWidth/2, gameHeight/2 + 100);
     loadingBar.fillStyle("#000000", 1);
@@ -47,6 +68,9 @@ loadingScene.preload = function() {
     // currently that's of course only the background
     this.load.image('background', 'assets/images/background.png');
     this.load.image('head', 'assets/images/brain.jpeg');
+    for (let i = 0; i < 1000; i++) { 
+        this.load.image('head' + i, 'assets/images/brain.jpeg'); 
+    } 
 
 };
 

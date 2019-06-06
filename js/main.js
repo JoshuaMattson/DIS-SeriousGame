@@ -59,6 +59,7 @@ gameScene.init = function() {
     // log we are now in "Game Scene"
     console.log("Started Scene: Game");
     this.state = GAMESTATE.READY;
+    this.realTime = 0;
 };
 
 gameScene.preload = function() {
@@ -124,7 +125,7 @@ gameScene.create = function() {
 
     //this.healthBar = new HealthBar(this, config.width/2, config.height/2);
     //Work mini games
-    this.calc = this.add.sprite(config.width/2, config.height/4-20, 'workCalc');
+    this.calc = this.add.sprite(config.width/2, config.height/4-80, 'workCalc');
     this.calc.setScale(0.7);
     this.generateWorkNums();
     this.makeWork();
@@ -138,7 +139,7 @@ gameScene.create = function() {
     this.velocityTimer = this.time.addEvent({ delay: 1000, callback: function(){gameScene.velocity++;}, callbackScope: this, loop: true });
 
     //sleep minigame
-    imageSleepkey = this.add.image(110, 120, 'sleepButton').setOrigin(0);
+    imageSleepkey = this.add.image(110, 70, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
     this.input.keyboard.on('keydown_Z', function (event) {
         gameScene.sleepBar.increase(0.7);
@@ -280,7 +281,7 @@ gameScene.create = function() {
 
 
     //social game
-    let texting = this.add.image(730, 640, 'texting'); //550, 450
+    let texting = this.add.image(730, 540, 'texting'); //550, 450
     texting.setScale(1.3,1);
     this.firstPhrase = true;
     this.prevPhrase = 0;
@@ -336,11 +337,17 @@ gameScene.create = function() {
     graphics.strokeLineShape(line10);
 
     this.randomEvent = new RandomEvent();
+    this.firstEvent = true;
     this.timedEvent = this.time.addEvent({ delay: 5000, callback: onTimer, callbackScope: this, loop: true });
     this.eventText = this.add.text(50, 715, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
+
+    this.timeText = this.add.text(50, 750, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'}) 
 };
 
-gameScene.update = function() {
+gameScene.update = function(time, delta) {
+  this.realTime += delta; 
+  this.timeText.setText('Time Elapsed: ' + Math.floor((this.realTime/1000)).toString() + "s."); 
+
   this.exerciseBar.decrease(0.04);
   this.socialBar.decrease(0.04);
   this.foodBar.decrease(0.04);
@@ -426,9 +433,9 @@ gameScene.generateWorkNums = function(){
 
 gameScene.makeWork = function(){
   if (!numsExist){
-  this.num0 = this.add.text(450, 140, this.workNums[0], { fontSize: '50px', fill: '#000000' });
-  this.num1 = this.add.text(480, 140, this.workNums[1], { fontSize: '50px', fill: '#000000' });
-  this.num2 = this.add.text(510, 140, this.workNums[2], { fontSize: '50px', fill: '#000000' });
+  this.num0 = this.add.text(450, 77, this.workNums[0], { fontSize: '50px', fill: '#000000' });
+  this.num1 = this.add.text(480, 77, this.workNums[1], { fontSize: '50px', fill: '#000000' });
+  this.num2 = this.add.text(510, 77, this.workNums[2], { fontSize: '50px', fill: '#000000' });
   workListeners();
   numsExist=true;
 } else {
@@ -489,7 +496,7 @@ gameScene.socialGame = function() {
                    "howdy","thank you","see you soon",
                    "coffee at eight", "i wanna party",
                    "are you free","i appreciate it",
-                   "is everything all right","heyyo",
+                   "is everything okay","heyyo",
                    "bruh","lmao","xoxo","i love you",
                    "talk to you later","yeet","wow"];
  if(this.firstPhrase == true) {
@@ -505,10 +512,10 @@ gameScene.socialGame = function() {
 
  console.log(textWords[wordNum]);
  gameScene.textWord = textWords[wordNum];
- let wordNumText = this.add.text(550, 540, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
+ let wordNumText = this.add.text(550, 440, gameScene.textWord, {fontSize:'30px',color:'#0000ff',fontFamily: 'Courier New'});
  wordNumText.depth = 10;
  gameScene.combo = this.input.keyboard.createCombo(gameScene.textWord);
- gameScene.playerText = this.add.text(550, 610, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
+ gameScene.playerText = this.add.text(550, 510, "", {fontSize:'30px',color:'#ffffff',fontFamily: 'Courier New'});
 
  this.input.keyboard.on('keycombomatch', function (event) {
 
@@ -521,19 +528,25 @@ gameScene.socialGame = function() {
 
 function onTimer() {
  gameScene.eventText.setText("");
- gameScene.randomEvent.generate();
- gameScene.eventText.setText(gameScene.randomEvent.text);
- if(gameScene.randomEvent.stat === "Work") {
-   gameScene.workBar.decrease(gameScene.randomEvent.magnitude);
- } else if (gameScene.randomEvent.stat === "Sleep") {
-   gameScene.sleepBar.decrease(gameScene.randomEvent.magnitude);
- } else if (gameScene.randomEvent.stat === "Social") {
-   gameScene.socialBar.decrease(gameScene.randomEvent.magnitude);
- } else if (gameScene.randomEvent.stat === "Food") {
-   gameScene.foodBar.decrease(gameScene.randomEvent.magnitude);
- } else { //Exercise
-   gameScene.exerciseBar.decrease(gameScene.randomEvent.magnitude);
+ if(gameScene.firstEvent === true) {
+  gameScene.eventText.setText("Too easy? Let's try balancing your mental health.");
+  gameScene.firstEvent = false;
+ } else {
+  gameScene.eventText.setText(gameScene.randomEvent.text);
+  if(gameScene.randomEvent.stat === "Work") {
+    gameScene.workBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Sleep") {
+    gameScene.sleepBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Social") {
+    gameScene.socialBar.decrease(gameScene.randomEvent.magnitude);
+  } else if (gameScene.randomEvent.stat === "Food") {
+    gameScene.foodBar.decrease(gameScene.randomEvent.magnitude);
+  } else { //Exercise
+     gameScene.exerciseBar.decrease(gameScene.randomEvent.magnitude);
+  }
  }
+ gameScene.randomEvent.generate();
+ 
 }
 
 function foodTimer() {

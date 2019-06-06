@@ -1,7 +1,7 @@
 class FoodDrop extends Phaser.Physics.Arcade.Sprite{
 
     constructor(scene,timeAlive,velocity) {
-        let food_circle = super(scene, Phaser.Math.Between(0, 400), 380, "food_circle");
+        let food_circle = super(scene, Phaser.Math.Between(0, 400), 300, "food_circle");
         scene.add.existing(food_circle);
         scene.physics.add.existing(food_circle);
 
