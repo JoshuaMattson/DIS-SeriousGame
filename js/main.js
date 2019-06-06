@@ -139,7 +139,7 @@ gameScene.create = function() {
     this.velocityTimer = this.time.addEvent({ delay: 1000, callback: function(){gameScene.velocity++;}, callbackScope: this, loop: true });
 
     //sleep minigame
-    imageSleepkey = this.add.image(110, 70, 'sleepButton').setOrigin(0);
+    imageSleepkey = this.add.image(80, 80, 'sleepButton').setOrigin(0);
     imageSleepkey.setScale(scale);
     this.input.keyboard.on('keydown_Z', function (event) {
         gameScene.sleepBar.increase(0.7);
@@ -341,12 +341,12 @@ gameScene.create = function() {
     this.timedEvent = this.time.addEvent({ delay: 5000, callback: onTimer, callbackScope: this, loop: true });
     this.eventText = this.add.text(50, 715, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
 
-    this.timeText = this.add.text(50, 750, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'}) 
+    this.timeText = this.add.text(50, 750, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'})
 };
 
 gameScene.update = function(time, delta) {
-  this.realTime += delta; 
-  this.timeText.setText('Time Elapsed: ' + Math.floor((this.realTime/1000)).toString() + "s."); 
+  this.realTime += delta;
+  this.timeText.setText('Time Elapsed: ' + Math.floor((this.realTime/1000)).toString() + "s.");
 
   this.exerciseBar.decrease(0.04);
   this.socialBar.decrease(0.04);
@@ -546,7 +546,7 @@ function onTimer() {
   }
  }
  gameScene.randomEvent.generate();
- 
+
 }
 
 function foodTimer() {
