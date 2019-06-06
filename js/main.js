@@ -10,6 +10,8 @@ var imageSleepkey;
 
 let numCount = 0;
 
+gameScene.velocity = 100;
+
 // our game's configuration
 let config = {
   type: Phaser.AUTO,
@@ -19,7 +21,7 @@ let config = {
       default: 'arcade',
       arcade: {
           gravity: { y: 2000 },
-          debug: true
+          debug: false
       }
   },
   scene: [bootScene, loadingScene, homeScene, gameScene],
@@ -153,14 +155,7 @@ gameScene.create = function() {
     // food minigame
     //
     //
-    this.foodPlayer = new Food_Player(this, 100, 700);
-
-    this.food = [];
-    for(let i = 0; i < 12; i++){
-        let xLocation = Phaser.Math.Between(0, 400);
-        let food = this.physics.add.sprite(xLocation, 0, 'food_circle');
-        this.food.push(food);
-    }
+    this.foodPlayer = new Food_Player(this, 100, 650);
 
 
     //sleep minigame
@@ -236,7 +231,16 @@ gameScene.create = function() {
     //random events
     this.randomEvent = new RandomEvent();
     this.timedEvent = this.time.addEvent({ delay: 3500, callback: onTimer, callbackScope: this, loop: true });
-    this.eventText = this.add.text(50, 650, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
+    this.eventText = this.add.text(50, 700, "", {fontSize:'20px',color:'#ff0000',fontFamily: 'Courier New'});
+
+    //food drop time
+    foodTimer.call(this);
+    this.foodTimedEvent = this.time.addEvent({ delay: 4000, callback: foodTimer, callbackScope: this, loop: true });
+
+    this.velocityTimer = this.time.addEvent({ delay: 1000, callback: function(){gameScene.velocity++;}, callbackScope: this, loop: true });
+
+
+
 
 };
 
@@ -304,7 +308,7 @@ gameScene.update = function() {
   }
 
   //random events
-  
+
 
 };
 
@@ -428,4 +432,15 @@ function onTimer() {
   } else { //Exercise
     gameScene.exerciseBar.decrease(gameScene.randomEvent.magnitude);
   }
+}
+
+function foodTimer() {
+  let foodDrop = new FoodDrop(gameScene,10000,gameScene.velocity);
+  foodDrop.depth = -1;
+  this.physics.add.overlap(this.foodPlayer,foodDrop, collectNutrition, null, this);
+}
+
+function collectNutrition(player,food){
+   this.foodBar.increase(15);
+   food.destroy();
 }
