@@ -7,7 +7,7 @@ class RandomEvent {
     }
 
     generate = function() {
-        let numEvents = 7;
+        let numEvents = 8;
         let seedNum = Math.floor(Math.random() * numEvents);
 
         if (seedNum === 0) {
@@ -42,6 +42,10 @@ class RandomEvent {
             this.text = "You've been taking a few too mant days off lately. (-15 Work)";
             this.stat = "Work";
             this.magnitude = 15;
+        } else if (seedNum === 7) {
+            this.text = "Today was a good day, and you're feeling all right. (No change)";
+            this.stat = "Work";
+            this.magnitude = 0;
         }
     }
 }
